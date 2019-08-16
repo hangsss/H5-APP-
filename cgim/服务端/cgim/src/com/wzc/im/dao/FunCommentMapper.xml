@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wzc.im.dao.FunCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.wzc.im.bean.FunComment" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="DYNAMICID" property="dynamicid" jdbcType="VARCHAR" />
+    <result column="USERID" property="userid" jdbcType="INTEGER" />
+    <result column="USERNAME" property="username" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="CONTENT" property="content" jdbcType="VARCHAR" />
+    <result column="REPLY_ID" property="replyId" jdbcType="INTEGER" />
+    <result column="REPLY_NAME" property="replyName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, DYNAMICID, USERID, USERNAME, CREATETIME, CONTENT, REPLY_ID, REPLY_NAME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wzc.im.bean.FunCommentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from fun_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from fun_comment
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from fun_comment
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wzc.im.bean.FunCommentExample" >
+    delete from fun_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wzc.im.bean.FunComment" >
+    insert into fun_comment (ID, DYNAMICID, USERID, 
+      USERNAME, CREATETIME, CONTENT, 
+      REPLY_ID, REPLY_NAME)
+    values (#{id,jdbcType=VARCHAR}, #{dynamicid,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}, 
+      #{username,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR}, 
+      #{replyId,jdbcType=INTEGER}, #{replyName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wzc.im.bean.FunComment" >
+    insert into fun_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="dynamicid != null" >
+        DYNAMICID,
+      </if>
+      <if test="userid != null" >
+        USERID,
+      </if>
+      <if test="username != null" >
+        USERNAME,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="content != null" >
+        CONTENT,
+      </if>
+      <if test="replyId != null" >
+        REPLY_ID,
+      </if>
+      <if test="replyName != null" >
+        REPLY_NAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="dynamicid != null" >
+        #{dynamicid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="replyId != null" >
+        #{replyId,jdbcType=INTEGER},
+      </if>
+      <if test="replyName != null" >
+        #{replyName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wzc.im.bean.FunCommentExample" resultType="java.lang.Integer" >
+    select count(*) from fun_comment
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update fun_comment
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dynamicid != null" >
+        DYNAMICID = #{record.dynamicid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userid != null" >
+        USERID = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.username != null" >
+        USERNAME = #{record.username,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null" >
+        CREATETIME = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.content != null" >
+        CONTENT = #{record.content,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replyId != null" >
+        REPLY_ID = #{record.replyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.replyName != null" >
+        REPLY_NAME = #{record.replyName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update fun_comment
+    set ID = #{record.id,jdbcType=VARCHAR},
+      DYNAMICID = #{record.dynamicid,jdbcType=VARCHAR},
+      USERID = #{record.userid,jdbcType=INTEGER},
+      USERNAME = #{record.username,jdbcType=VARCHAR},
+      CREATETIME = #{record.createtime,jdbcType=TIMESTAMP},
+      CONTENT = #{record.content,jdbcType=VARCHAR},
+      REPLY_ID = #{record.replyId,jdbcType=INTEGER},
+      REPLY_NAME = #{record.replyName,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wzc.im.bean.FunComment" >
+    update fun_comment
+    <set >
+      <if test="dynamicid != null" >
+        DYNAMICID = #{dynamicid,jdbcType=VARCHAR},
+      </if>
+      <if test="userid != null" >
+        USERID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="username != null" >
+        USERNAME = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="content != null" >
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="replyId != null" >
+        REPLY_ID = #{replyId,jdbcType=INTEGER},
+      </if>
+      <if test="replyName != null" >
+        REPLY_NAME = #{replyName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wzc.im.bean.FunComment" >
+    update fun_comment
+    set DYNAMICID = #{dynamicid,jdbcType=VARCHAR},
+      USERID = #{userid,jdbcType=INTEGER},
+      USERNAME = #{username,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      REPLY_ID = #{replyId,jdbcType=INTEGER},
+      REPLY_NAME = #{replyName,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

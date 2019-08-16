@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style type="text/css">
+			html,body{
+				height: 100%;
+				background-image: url(../images/startbg.png);
+				background-size: cover;
+			}
+			.mrow{
+				position: absolute;
+				bottom: 60px;
+				height: 40px;
+				width: 100%;
+			}
+			.mrow-6{
+				width: 50%;
+				text-align: center;
+			}
+			.mui-btn.mui-btn-green{
+				height: 40px;
+				width: 120px;
+				background:ForestGreen;
+				border: 1px solid ForestGreen;
+			}
+		</style>
+	</head>
+
+	<body>
+		<a href="#modal"  class="mui-btn mui-btn-link" style="position: fixed;bottom: 10px;right: 10px;">
+			<span class="mui-icon mui-icon-gear-filled" style="font-size: 25px;"></span>
+		</a>
+		<div class="mrow mui-hidden">
+			<div class="mrow-6 mui-pull-left">
+				<button id="login" type="button" class="mui-btn mui-btn-green">登录</button>
+			</div>
+			<div class="mrow-6 mui-pull-right">
+				<button id="regist" type="button" class="mui-btn mui-btn-green">注册</button>
+			</div>
+		</div>
+		<div id="modal" class="mui-modal">
+			<header class="mui-bar mui-bar-nav">
+				<a class="mui-icon mui-icon-close mui-pull-right" href="#modal"></a>
+				<h1 class="mui-title">设置</h1>
+			</header>
+			<div class="mui-content" style="height: 100%;padding: 10px;">
+				<h5 class="mui-content-padded">设置服务器IP</h5>
+				<input type="text" id="setip" placeholder="请输入服务器IP" >
+				<button type="button" id="reapp" class="mui-btn mui-btn-blue mui-btn-block">保存并重启应用</button>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({preloadPages:[{url:"login.html",id:"login.html"},{url:"regist.html",id:"regist.html"}]})//preloadPages提前载入一个页面，以便在后面需要打开时快速打开。
+			mui.plusReady(function() {
+				document.querySelector(".mrow").classList.remove("mui-hidden");
+				//开启自动登陆
+//				if(user!=null){
+//					mui.preload({url:"index.html",id:"index.html"});
+//					plus.nativeUI.showWaiting();		
+//					setTimeout(function(){
+//					plus.nativeUI.closeWaiting();
+//						mui.openWindow({url:'index.html',id:'index.html'});
+//					},3000);
+//					
+//				}else{
+//					document.querySelector(".mrow").classList.remove("mui-hidden");
+//				}
+			});
+			document.getElementById("login").addEventListener("tap",function(){
+				mui.openWindow({url:'login.html',id:'login.html'});
+			},false);
+			document.getElementById("regist").addEventListener("tap",function(){
+				mui.openWindow({url:'regist.html',id:'regist.html'});
+			},false);
+			document.getElementById("reapp").addEventListener("tap",function(){
+				var ip = document.getElementById("setip").value;
+				if(ip!=null&&ip!=""){
+					window.localStorage.setItem("sip","http://"+ip+":9999/cgim/");//生命周期永久,存储大小更大,不同于sessionStorage的生命周期只存在于窗口或标签页
+					plus.runtime.restart();//将所输入ip存入sip
+				}
+			});
+		</script>
+	</body>
+
+</html>

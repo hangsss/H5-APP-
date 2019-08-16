@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>发布动态</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/iconfont.css"/>
+		<script src="../js/config.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.imgpriview{
+				height: 80px;
+				width: 80px;
+				background-repeat: no-repeat;
+				background-size: cover;
+				float: left;
+				margin-left: 5px;
+				margin-bottom: 5px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" ></a>
+			<h1 class="mui-title">发表动态</h1>
+			<a  class="mui-pull-right mui-icon iconfont icon-yuanxingxuanzhong"></a>
+		</header>
+		<div class="mui-content" style="height: 100%;">
+			<form class="mui-input-group">
+		        <textarea id="content" rows="10" placeholder="你此刻的想法..."></textarea>
+		    	<div class="mui-row" id="imglist" style="padding: 5px 10px;"> </div>
+		    	<div class="mui-row">
+		    	    <img id="uploadimg" src="../images/upload.png" width="80px" style="margin: 15px;border-radius: 3px;"/>
+		    	</div>
+			</form>
+			<!--<ul class="mui-table-view" style="margin-top: 15px;">
+		        <li class="mui-table-view-cell">
+					<span>显示位置</span>
+					<div class="mui-switch mui-switch-mini">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+		    </ul>-->
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			document.querySelector(".mui-pull-right").addEventListener("tap",function(){
+				var textareaval = document.querySelector("textarea").value;
+				if(textareaval!=""&&textareaval!=null){
+					plus.nativeUI.showWaiting("发表中...");
+					mui.post(sip+"publishDynamic.do",{createuserid:user.id,createname:user.name,content:textareaval,extras:imgpathary.toString()},function(json){
+						plus.nativeUI.closeWaiting();
+						if(json=="true"){
+							mui.toast("发表成功");
+							plus.webview.currentWebview().opener().evalJS("getdynamiclist()");
+							mui.back();
+						}
+					})
+				}
+			});
+			var imgpathary = new Array();
+			var upimg =document.getElementById("uploadimg");
+			var imglist = document.getElementById("imglist");
+			upimg.addEventListener("tap",function(){
+				var btnArray = [{title: "拍照"}, {title: "从相册选择"}];
+				plus.nativeUI.actionSheet({title: "上传图片",cancel: "取消",buttons: btnArray}, function(e) {
+					var index = e.index;
+					switch (index) {
+						case 0:
+							break;
+						case 1:
+							var cmr = plus.camera.getCamera();
+							cmr.captureImage(function(path) {
+								var task = plus.uploader.createUpload(sip+"uploadfile.do",{method: "POST"},function(t,status) {
+								            if (status == 200) { 
+								                eval("var data="+t.responseText);
+								                if(data.result=="OK"){
+								                	var len = imgpathary.length;
+								                	imgpathary[len]=data.path;
+								                	imglist.innerHTML+="<div id='"+data.path+"' style='background-image:url("+sip+data.path+");' class='imgpriview'></div>";
+								                }else{
+								                	mui.toast("上传失败！");
+								                }
+								            }else{ 
+								            	mui.toast("上传失败！");
+								            } 
+							        	} 
+							    ); 
+							    var keyid = Math.floor(Math.random() * 100000000 + 10000000).toString();
+							    var dstname="_downloads/"+keyid+".jpg";
+							   	plus.zip.compressImage({
+						            src: "file://" + plus.io.convertLocalFileSystemURL(path), 
+						            dst: dstname, 
+						            overwrite:true, 
+						            quality: 20 
+						        },function(event) { 
+						            task.addFile(event.target, {key: keyid}); 
+							    	task.start();
+						        },function(error) { 
+						            console.log(error); 
+						        });
+							}, function(err) {});
+							break;
+						case 2:
+							plus.gallery.pick(function(path) { 
+						        	var task = plus.uploader.createUpload(sip+"uploadfile.do",
+							    		{method: "POST"},function(t, status) {
+								            if (status == 200) { 
+								                eval("var data="+t.responseText);
+								                if(data.result=="OK"){
+								                	imgpathary.push(data.path);
+								                	imglist.innerHTML+="<div id='"+data.path+"' style='background-image:url("+sip+data.path+");' class='imgpriview'></div>";
+								                }else{
+								                	mui.toast("上传失败！");
+								                }
+								            }else{ 
+								            	mui.toast("上传失败！");
+								            } 
+							        	}); 
+							        var keyid = Math.floor(Math.random() * 100000000 + 10000000).toString();
+							    	var dstname="_downloads/"+keyid+".jpg";
+								   	plus.zip.compressImage({src: path, dst: dstname, overwrite:true, quality: 20 },
+								   		function(event) {
+								            task.addFile(event.target, {key: keyid}); 
+									    	task.start();
+							        	},function(error) {console.log(error)});
+		    				}, function(e) {},{filter: "image"});
+							break;
+					}
+				});
+			});
+			mui("#imglist").on("tap",".imgpriview",function(){
+				var obj = this;
+				plus.nativeUI.actionSheet({title: "删除该图片？",cancel: "取消",buttons:  [{title: "确定"}]}, function(e) {
+					var index = e.index;
+					switch (index) {
+						case 0:break;
+						case 1:
+						for(var i=0;i<imgpathary.length;i++){
+							var path = imgpathary[i];
+							if(path==obj.id){
+								imgpathary =imgpathary.del(i);
+								break;
+							}
+						}
+						obj.remove();
+						break;
+					}
+				});
+			});
+			//自定义数组元素删除方法
+			Array.prototype.del=function(n) {if(n<0)　{return this;}else{return this.slice(0,n).concat(this.slice(n+1,this.length));}}
+ 			mui.plusReady(function(){
+ 				plus.webview.currentWebview().addEventListener("hide",function(){
+ 					window.location.reload();
+ 				})
+ 			});
+		</script>
+	</body>
+
+</html>

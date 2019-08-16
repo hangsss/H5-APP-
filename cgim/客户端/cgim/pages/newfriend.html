@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<script src="../js/config.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.mtime{
+				float: right;
+				font-size: 14px;
+				color:#8f8f94;
+			}
+			.mui-table-view .mui-media-object {
+			    border-radius: 3px;
+			}
+			.mui-content>.mui-table-view:first-child {
+			    margin-top: 0px;
+			}
+			.bodytop{
+				width: 100%;height: 24px;
+			}
+			.bodybot{
+				width: 100%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">新的朋友</h1>
+		</header>
+		<div class="mui-content">
+			<h5 class="mui-content-padded">好友通知</h5>
+			<ul class="mui-table-view" id="adviceul"></ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			window.addEventListener("receivemsg",function(event){
+				var msg = event.detail.message;
+				var applyary = [msg.mid,msg.fromid,msg.fromname,msg.msgtime,msg.msgtext,0];
+				saveApplyToLocalDB(applyary);
+			})
+			mui("#adviceul").on("tap",".agreebtn",function(){
+				var liid =  this.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+				db.transaction(function (tx) {  
+					var sql="SELECT * FROM applylog where aid =?";
+					tx.executeSql(sql, [liid], function (tx, results) {
+						var tid =  results.rows.item(0).applyid;
+						mui.post(sip+"addfriend.do",{uid:user.id,tid:tid},function(data){
+							if(data=="true"){
+								document.getElementById(liid+"_state").innerHTML="<p>已同意</p>";
+								plus.webview.getWebviewById("sub_contact.html").evalJS("getMyFriends()");
+								db.transaction(function (tx) {tx.executeSql('UPDATE applylog SET state=1 WHERE aid=?',[liid]);});
+								updatelocaluserinfo();
+							}
+						});
+					}, null);
+				});
+			});
+			function updatelocaluserinfo(){
+				mui.post(sip+"getUser.do",{id:user.id},function(data){
+					if(data!=null&&data!="null"&&data!="[]"){
+						window.localStorage.setItem("user","("+data+")");
+					}
+				});
+			}
+			mui("#adviceul").on("tap",".rejectbtn",function(){
+				var liid =  this.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.id;
+				document.getElementById(liid+"_state").innerHTML="<p>已拒绝</p>";
+				db.transaction(function (tx) {tx.executeSql('UPDATE applylog SET state=2 WHERE aid=?',[liid]);});
+			});
+			mui("#adviceul").on("tap",".deletebtn",function(){
+				var liid =  this.parentNode.parentNode.id;
+				document.getElementById("adviceul").removeChild(document.getElementById(liid));
+				db.transaction(function (tx) {tx.executeSql('DELETE FROM applylog where aid=?',[liid]);});
+			});
+			function saveApplyToLocalDB(applyary){
+				db.transaction(function (tx) { 
+					tx.executeSql('CREATE TABLE IF NOT EXISTS applylog (rid int identity(1,1) primary key,aid,applyid,applyname,sendtime,applytxt,state)');
+					tx.executeSql('INSERT INTO applylog (aid,applyid,applyname,sendtime,applytxt,state) VALUES (?,?,?,?,?,?)',applyary);
+				});
+			}
+			function adddata(apply){
+				var li = document.createElement("li");
+				li.id =apply.aid;
+				li.className ="mui-table-view-cell mui-media";
+				var operate;
+				if(apply.state==1){
+					operate='<p>已同意</p>';
+				}else if(apply.state==2){
+					operate='<p>已拒绝</p>';
+				}else{
+					operate ='<button type="button" class="mui-btn mui-btn-blue agreebtn">同意</button><button type="button" class="mui-btn mui-btn-red rejectbtn" style="margin-left: 5px;">拒绝</button>';
+				}
+				li.innerHTML='<div class="mui-slider-right mui-disabled"><a class="mui-btn mui-btn-red deletebtn">删除</a></div>'+
+						'<div class="mui-slider-handle" ><a href="javascript:void(0)" style="color:#000000;"><img class="mui-media-object mui-pull-left" src="'+sip+'getuimg.do?uid='+apply.applyid+'">'+
+						'<div class="mui-media-body"><div class="bodytop">'+apply.applyname+'<span class="mtime">'+fdt(apply.sendtime)+'</span></div>'+
+						'<div class="bodybot"><p class="mui-ellipsis"  style="float: left;">'+apply.applytxt+'</p><span style="float: right;" id="'+apply.aid+'_state">'+operate+'</span></div></div></a></div>';
+				document.getElementById("adviceul").appendChild(li);
+			}
+			function getApplyFromDB(){
+				db.transaction(function (tx) {  
+					var sql="SELECT * FROM applylog order by rid desc";
+					tx.executeSql(sql, [], function (tx, results) {
+						if(results.rows.length>0){
+							document.getElementById("adviceul").innerHTML="";
+							for(var i=results.rows.length;i>0;i--){
+								var row = results.rows.item(i-1);
+							    var str = '{aid:"'+row.aid+'",applyid:"'+row.applyid+'",applyname:"'+row.applyname+'",sendtime:"'+row.sendtime+'",applytxt:"'+row.applytxt+'",state:"'+row.state+'"}';
+								adddata(eval("("+str+")"));
+							}
+						}
+					}, null);
+				});
+			}
+			mui.plusReady(function(){
+				plus.webview.currentWebview().addEventListener("show",function(){
+					document.getElementById("adviceul").innerHTML='<li class="mui-table-view-cell mui-disabled">暂无好友通知</li>';
+					getApplyFromDB();
+				})
+			});
+		</script>
+	</body>
+
+</html>

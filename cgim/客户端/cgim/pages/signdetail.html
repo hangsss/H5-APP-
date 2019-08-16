@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<script src="../js/config.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.rotate{-webkit-transition:-webkit-transform 2s;} 
+			.rotate:hover{-webkit-transform:rotate(1080deg);}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">签到详情</h1>
+		    <a class="mui-icon mui-icon-refreshempty mui-pull-right rotate"></a>
+		</header>
+		<div class="mui-content">
+		    <ul class="mui-table-view" id="signusers"></ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			var sid;
+			window.addEventListener("sendID",function(event){
+				sid = event.detail.sid;
+				getsignUserList();
+			});
+			mui.plusReady(function(){
+				plus.webview.currentWebview().addEventListener("show",function(){
+					getsignUserList();
+				});
+			});
+			function getsignUserList(){
+				mui.post(sip+"signUserList.do",{id:sid},function(json){
+					if(json!=null&&json!="[]"){
+						document.getElementById("signusers").innerHTML="";
+						var signusers =JSON.parse(json);
+						for(var i=0;i<signusers.length;i++){
+							var suser = signusers[i];
+							var li = document.createElement("li");
+							li.id=suser.signuserid;
+							li.className="mui-table-view-cell mui-media";
+							li.innerHTML='<img class="mui-media-object mui-pull-left" src="'+sip+'getuimg.do?uid='+suser.signuserid+'">'+
+										'<div class="mui-media-body">'+suser.signuser+'<p class="mui-ellipsis">签到时间：'+suser.signtime+'</p></div>';
+							document.getElementById("signusers").appendChild(li);
+						}
+					}else{
+						document.getElementById("signusers").innerHTML='<li class="mui-table-view-cell"><div class="mui-media-body">暂时无人签到</div></li>';
+					}
+				});
+			}
+			document.querySelector(".mui-icon-refreshempty").addEventListener("tap",function(){
+				getsignUserList();
+			});
+		</script>
+	</body>
+
+</html>

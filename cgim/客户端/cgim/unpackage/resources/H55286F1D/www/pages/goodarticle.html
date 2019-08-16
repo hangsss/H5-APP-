@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>详情</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<link rel="stylesheet" type="text/css" href="../css/iconfont.css"/>
+		<style>
+			#topPopover {
+				position: fixed;
+				top: 16px;
+				right: 6px;
+			}
+			#topPopover .mui-popover-arrow {
+				left: auto;
+				right: 6px;
+			}
+			.mui-popover {
+				height: 100px;
+				width: 140px;
+			}
+			a:hover {text-decoration: none;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">今日精选</h1>
+		    <a class="mui-icon iconfont icon-shengyin mui-pull-right" onclick="play_sound();" style="padding:13px 5px"></a>
+		</header>
+		<div class="mui-content mui-scroll-wrapper" style="background: #FFFFFF;">
+			<div class="mui-scroll">
+				<center><h3 style="padding:10px 0;">《匆匆那年》</h3></center>
+				<div class="tts" style="padding: 10px;font-size: 17px;color: #000000;">
+						匆匆那年我们 究竟说了几遍 再见之后再拖延<br><br>
+						可惜谁有没有 爱过不是一场 七情上面的雄辩<br><br>
+						匆匆那年我们 一时匆忙撂下 难以承受的诺言<br><br>
+						只有等别人兑现<br><br>
+						不怪那吻痕还 没积累成茧<br><br>
+						拥抱着冬眠也没能 羽化再成仙<br><br>
+						不怪这一段情 没空反复再排练<br><br>
+						是岁月宽容恩赐 反悔的时间<br><br>
+						如果再见不能红着眼 是否还能红着脸<br><br>
+						就像那年匆促 刻下永远一起 那样美丽的谣言<br><br>
+						如果过去还值得眷恋 别太快冰释前嫌<br><br>
+						谁甘心就这样 彼此无挂也无牵<br><br>
+						我们要互相亏欠 要不然凭何怀缅<br><br>
+						匆匆那年我们 见过太少世面 只爱看同一张脸<br><br>
+						那么莫名其妙 那么讨人欢喜 闹起来又太讨厌<br><br>
+						相爱那年活该 匆匆因为我们 不懂顽固的诺言<br><br>
+						只是分手的前言<br><br>
+						不怪那天太冷 泪滴水成冰<br><br>
+						春风也一样没 吹进凝固的照片<br><br>
+						不怪每一个人 没能完整爱一遍<br><br>
+						是岁月善意落下 残缺的悬念<br><br>
+						如果再见不能红着眼 是否还能红着脸<br><br>
+						就像那年匆促 刻下永远一起 那样美丽的谣言<br><br>
+						如果过去还值得眷恋 别太快冰释前嫌<br><br>
+						谁甘心就这样 彼此无挂也无牵<br><br>
+						如果再见不能红着眼 是否还能红着脸<br><br>
+						就像那年匆促 刻下永远一起 那样美丽的谣言<br><br>
+						如果过去还值得眷恋 别太快冰释前嫌<br><br>
+						谁甘心就这样 彼此无挂也无牵<br><br>
+						我们要互相亏欠<br><br>
+						我们要藕断丝连<br><br>
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/fingerprint.js"></script>
+	    <script type="text/javascript" src="../js/tts.min.js"></script>
+	    <script type="text/javascript" src="../js/tts_detail.js"></script>
+		<script type="text/javascript">
+			mui.init({
+				swipeBack:true,
+				beforeback: function() {
+					if(p!=null){
+						p.stop();
+					}
+				}
+			});
+			mui(".mui-scroll-wrapper").scroll();
+		</script>
+	</body>
+
+</html>

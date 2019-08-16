@@ -1,0 +1,145 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>选择用户</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style>
+			.mui-media-body{
+				font-size: 15px;
+				line-height: 35px;
+			}
+			.mui-table-view-cell {
+				padding: 9px 5px 9px 15px;
+			}
+			.mui-table-view .mui-media-object {
+				max-width: 35px;
+			    height: 35px;
+			    border-radius: 3px;
+			}
+			.mui-content>.mui-table-view:first-child {
+			    margin-top: 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-btn mui-btn-link mui-pull-left mui-btn-blue mui-action-back">取消</a>
+		    <h1 class="mui-title">选择用户</h1>
+		    <a id='done' class="mui-btn mui-btn-link mui-pull-right mui-btn-blue mui-disabled">完成</a>
+		</header>
+		<div class="mui-content">
+			<div class="mui-input-row mui-search" style="margin-top: 5px;" >
+		        <input type="search" class="mui-input-clear" placeholder="搜索">
+		    </div>
+		    <div class="mui-scroll-wrapper" style="margin-top: 90px;">
+				<div class="mui-scroll">
+					<ul id="suserlist" class="mui-table-view"></ul>
+					<ul id="searchresult" class="mui-table-view mui-hidden"></ul>
+				</div>
+			</div>
+		</div>
+		
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui(".mui-scroll-wrapper").scroll();
+			var suserlist = document.getElementById("suserlist");
+			mui.plusReady(function(){
+				mui.post(sip+"getMyFriends.do",{id:user.id},function( data ) {
+					var userlist = eval(data);
+					for(var i=0;i<userlist.length;i++){
+						var suser = userlist[i];
+						if(suser.id!=user.id){
+							addData(suser);
+						}
+					}
+				});
+			});
+			function addData(suser){
+				var id = suser.id;
+				var li = document.createElement('li');
+				li.setAttribute("sel",suser.name);
+				li.className = 'mui-table-view-cell mui-media';
+				li.innerHTML = '<a href="javascript:void(0)"><img class="mui-media-object mui-pull-left" src="'+sip+suser.uimg+'"><div class="mui-media-body mui-checkbox">'+suser.name+'<input value="'+id+':'+suser.name+'" type="checkbox" ></div></a>';
+				suserlist.appendChild(li);
+			}
+			var done = document.getElementById('done');
+			mui.ready(function() {
+				done.addEventListener('tap', function() {
+					var checkboxArray = [].slice.call(suserlist.querySelectorAll('input[type="checkbox"]'));
+					var checkedValues =new Array();
+					checkboxArray.forEach(function(box) {
+						if (box.checked) {
+							checkedValues[checkedValues.length] =box.value; 
+						}
+					});
+					if (checkedValues.length > 0) {
+						var userids = new Array();
+						var usernames = new Array();
+						for(var i=0;i<checkedValues.length;i++){
+							var id = checkedValues[i].split(":")[0];
+							var name = checkedValues[i].split(":")[1];
+							userids[userids.length]=id;
+							usernames[usernames.length] =name;
+						}
+						mui.fire(plus.webview.currentWebview().opener(),"getusers",{usernames:usernames.toString(),userids:userids.toString()})
+					} else {
+						console.info("未选择");
+					}
+					mui.back();
+				}, false);
+				mui('#suserlist').on('change', 'input', function() {
+					countchecked();
+				});
+			});
+			function countchecked(){
+				var count = suserlist.querySelectorAll('input[type="checkbox"]:checked').length;
+				var value = count ? "完成(" + count + ")" : "完成";
+				done.innerHTML = value;
+				if (count) {
+					if (done.classList.contains("mui-disabled")) {
+						done.classList.remove("mui-disabled");
+					}
+				} else {
+					if (!done.classList.contains("mui-disabled")) {
+						done.classList.add("mui-disabled");
+					}
+				}
+			}
+			document.querySelector(".mui-input-clear").addEventListener("input",function(){
+				var val = this.value;
+				var reslist = document.querySelector("#searchresult");
+				if(val!=""){
+					var nodelist = mui('li[sel *="'+val+'"]');
+					reslist.innerHTML = "";
+					ishidden(suserlist,reslist);
+					for(var i=0; i<nodelist.length;i++){
+						var node = nodelist[i].cloneNode(true);
+						reslist.appendChild(node);
+					}
+				}else{
+					ishidden(suserlist,reslist);
+				}
+				document.querySelector(".mui-icon-clear").addEventListener("tap",function(){
+					ishidden(suserlist,reslist);
+				});
+			});
+			function ishidden(obj1,obj2){
+				if(obj1.classList.contains("mui-hidden")&&!obj2.classList.contains("mui-hidden")){
+					obj1.classList.remove("mui-hidden");
+					obj2.classList.add("mui-hidden");
+				}else if(!obj1.classList.contains("mui-hidden")&&obj2.classList.contains("mui-hidden")){
+					obj2.classList.remove("mui-hidden");
+					obj1.classList.add("mui-hidden");
+				}
+			}
+		</script>
+	</body>
+
+</html>

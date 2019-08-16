@@ -1,0 +1,157 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<link rel="stylesheet" href="../css/iconfont.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style type="text/css">
+			.mui-grid-view.mui-grid-9 .mui-table-view-cell{
+				border: 0px;
+				padding:0px;
+			}
+			.mui-content>.mui-table-view:first-child {
+			    margin-top: 0px;
+			}
+			.mui-table-view-cell img{
+				width: 45px;
+				height: 45px;
+				border-radius: 3px;
+			}
+			
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">群聊信息</h1>
+		</header>
+		<div class="mui-content">
+		    <ul id="gusers" class="mui-table-view mui-grid-view mui-grid-9" style="background: white;">
+			    
+			    <li class="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3">
+			        <a href="#">
+			        	<img src="../images/upload.png">
+			            <div class="mui-media-body">添加</div>
+			        </a>
+			    </li>
+		    </ul>
+		    <ul class="mui-table-view" style="margin-top: 15px;">
+	            <li class="mui-table-view-cell">
+               		群聊名称<p class='mui-ellipsis mui-pull-right' id="gname"></p>
+	            </li>
+	            <li class="mui-table-view-cell" id="erweima">
+               		群聊二维码<span class='mui-icon iconfont icon-erweima mui-pull-right' ></span>
+	            </li>
+	        </ul>
+	        <ul class="mui-table-view" style="margin-top: 15px;">
+	            <li class="mui-table-view-cell">
+               		创建人<p class='mui-ellipsis mui-pull-right' id="createuser"></p>
+	            </li>
+	            <li class="mui-table-view-cell">
+               		创建时间<p class='mui-ellipsis mui-pull-right' id="createtime"></p>
+	            </li>
+	        </ul>
+	        <div class="mui-row" style="padding: 15px 8px;">
+	        	<button class="mui-btn mui-btn-danger mui-btn-block jiesan mui-hidden">解散群聊</button>
+	        	<button class="mui-btn mui-btn-danger mui-btn-block tuichu mui-hidden">退出群聊</button>
+	        </div>
+		</div>
+		<div class="mmodal mui-card mui-hidden">
+			<div id="output" style="margin: 30px;"></div>扫一扫上面的二维码加入群聊
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../js/jquery.qrcode.min.js" ></script>
+		<script type="text/javascript">
+			mui.init()
+			var ginfo;
+			window.addEventListener('getidandtype',function(event){
+					var id =event.detail.id;
+					var groupinfo = window.localStorage.getItem("groupinfo");
+					ginfo = JSON.parse(groupinfo);
+					$('#output').qrcode("jiongroup/"+ginfo.gid);
+					document.getElementById("createtime").innerHTML =new Date(ginfo.createtime).toLocaleDateString() ;
+					document.getElementById("gname").innerHTML=ginfo.gname;
+					document.getElementById("createuser").innerHTML = ginfo.createname;
+					var members = ginfo.members;
+					var table = document.getElementById("gusers");
+					if(members!=null){
+						if(members.indexOf(",")>-1){
+							var mss = members.split(",");
+							for(var i=0;i<mss.length;i++){
+								var ms = mss[i];
+								var li = document.createElement("li");
+								li.className ="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3";
+								li.id=ms;
+								li.innerHTML='<a href="#"><img src="'+sip+'getuimg.do?uid='+ms+'"><div class="mui-media-body">'+ms+'</div></a>'
+								table.insertBefore(li, table.firstChild);
+							}
+						}else{
+							var li = document.createElement("li");
+							li.className ="mui-table-view-cell mui-media mui-col-xs-3 mui-col-sm-3";
+							li.id=members;
+							li.innerHTML='<a href="#"><img src="'+sip+'getuimg.do?uid='+members+'"><div class="mui-media-body">'+members+'</div></a>'
+							table.insertBefore(li, table.firstChild);
+						}
+					}
+					if(ginfo.createuserid==user.id){
+						document.querySelector(".jiesan").classList.remove("mui-hidden");
+					}else{
+						document.querySelector(".tuichu").classList.remove("mui-hidden");
+					}
+			});
+			mui.plusReady(function(){
+				plus.webview.currentWebview().addEventListener("hide",function(){
+					window.location.reload();
+				})
+			})
+			//二维码显示
+			var showbtn = document.querySelector("#erweima");
+			var modal = document.querySelector(".mmodal");
+			var mask = mui.createMask(closemodal);
+			function closemodal(){modal.classList.add("mui-hidden");}
+			showbtn.addEventListener("tap",function(){
+				mask.show();
+				modal.classList.remove("mui-hidden");
+			});
+			
+			var tuichubtn = document.querySelector(".tuichu");
+			var jiesanbtn = document.querySelector(".jiesan");
+			tuichubtn.addEventListener("tap",function(){
+				mui.confirm("确定退出该群聊？","提示",['取消', '确定'],function(e){
+					if(e.index==1){
+						mui.post(sip+"quitGroup.do",{uid:user.id,gid:ginfo.gid},function(data){
+							if(data=="true"){
+								plus.webview.getWebviewById("groups.html").evalJS("getmygroups()");
+								plus.webview.getWebviewById("sub_message.html").evalJS("delchatlog('"+ginfo.gid+"')");
+								mui.toast("已退出该群聊");
+								plus.webview.getWebviewById("index.html").show();
+							}
+						});
+					}
+				});
+			});
+			jiesanbtn.addEventListener("tap",function(){
+				mui.confirm("确定解散该群聊？","提示",['取消', '确定'],function(e){
+					if(e.index==1){
+						mui.post(sip+"deleteGroup.do",{uid:user.id,gid:ginfo.gid},function(data){
+							if(data=="true"){
+								plus.webview.getWebviewById("groups.html").evalJS("getmygroups()");
+								plus.webview.getWebviewById("sub_message.html").evalJS("delchatlog('"+ginfo.gid+"')");
+								mui.toast("该群聊已解散");
+								plus.webview.getWebviewById("index.html").show();
+							}
+						});
+					}
+				});
+			});
+		</script>
+	</body>
+
+</html>

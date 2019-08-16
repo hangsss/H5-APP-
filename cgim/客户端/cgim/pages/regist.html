@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style>
+			.mui-input-group label {width: 22%;}
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {width: 78%;}
+			.mui-checkbox input[type=checkbox],
+			.mui-radio input[type=radio] {top: 6px;}
+			body,.mui-content{background-color: #FFFFFF;}
+			.mui-input-row{
+				height: 56px !important;
+				padding: 8px 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">注册</h1>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>昵称</label>
+					<input id="name" type="text" class="mui-input-clear mui-input" placeholder="请输入昵称">
+				</div>
+				<div class="mui-input-row">
+					<label>密码</label>
+					<input id="password" type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+				</div>
+				<div class="mui-input-row">
+					<label>确认</label>
+					<input id="password_confirm" type="password" class="mui-input-clear mui-input" placeholder="请确认密码">
+				</div>
+			</form>
+			<div class="mui-content-padded">
+				<button id="reg" class="mui-btn mui-btn-block mui-btn-success">注册</button>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js"></script>
+		<script type="text/javascript">
+			mui.init({preloadPages:[{url:"regist_ok.html",id:"regist_ok.html"}]})
+			mui(".mui-content-padded").on("tap","button",function(){
+				document.activeElement.blur();//按下注册按钮后先取消聚焦,即使得虚拟键盘收回
+				var name = document.getElementById("name").value;
+				var password = document.getElementById("password").value;
+				var password_confirm = document.getElementById("password_confirm").value;
+				if(password==password_confirm&&name!=""&&password!=""){//账户名与密码不能为空且两次密码必须一致
+					mui(this).button('loading');
+					console.log(sip+"regist.do");
+					mui.post(sip+"regist.do",{name:name,password:password,},function(data){  //ajax 向指定ip发送附加数据
+						var userinfo = JSON.parse(data);//封装为JOSN格式
+						firejump("regist_ok.html","showacount",{id:userinfo.id});//调用firejump函数
+					});
+				}else{
+					mui.toast("请填写正确信息");
+				}
+			});
+		</script>
+	</body>
+
+</html>

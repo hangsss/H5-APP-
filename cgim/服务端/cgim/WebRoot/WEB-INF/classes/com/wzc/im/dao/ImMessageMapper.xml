@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wzc.im.dao.ImMessageMapper" >
+  <resultMap id="BaseResultMap" type="com.wzc.im.bean.ImMessage" >
+    <id column="MID" property="mid" jdbcType="VARCHAR" />
+    <result column="FROMID" property="fromid" jdbcType="INTEGER" />
+    <result column="FROMNAME" property="fromname" jdbcType="VARCHAR" />
+    <result column="FROMTYPE" property="fromtype" jdbcType="VARCHAR" />
+    <result column="TARGETID" property="targetid" jdbcType="INTEGER" />
+    <result column="TARGETNAME" property="targetname" jdbcType="VARCHAR" />
+    <result column="TARGETTYPE" property="targettype" jdbcType="VARCHAR" />
+    <result column="MSGTEXT" property="msgtext" jdbcType="VARCHAR" />
+    <result column="MSGEXTRAS" property="msgextras" jdbcType="VARCHAR" />
+    <result column="MSGTYPE" property="msgtype" jdbcType="VARCHAR" />
+    <result column="MSGTIME" property="msgtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    MID, FROMID, FROMNAME, FROMTYPE, TARGETID, TARGETNAME, TARGETTYPE, MSGTEXT, MSGEXTRAS, 
+    MSGTYPE, MSGTIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wzc.im.bean.ImMessageExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from im_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from im_message
+    where MID = #{mid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from im_message
+    where MID = #{mid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wzc.im.bean.ImMessageExample" >
+    delete from im_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wzc.im.bean.ImMessage" >
+    insert into im_message (MID, FROMID, FROMNAME, 
+      FROMTYPE, TARGETID, TARGETNAME, 
+      TARGETTYPE, MSGTEXT, MSGEXTRAS, 
+      MSGTYPE, MSGTIME)
+    values (#{mid,jdbcType=VARCHAR}, #{fromid,jdbcType=INTEGER}, #{fromname,jdbcType=VARCHAR}, 
+      #{fromtype,jdbcType=VARCHAR}, #{targetid,jdbcType=INTEGER}, #{targetname,jdbcType=VARCHAR}, 
+      #{targettype,jdbcType=VARCHAR}, #{msgtext,jdbcType=VARCHAR}, #{msgextras,jdbcType=VARCHAR}, 
+      #{msgtype,jdbcType=VARCHAR}, #{msgtime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wzc.im.bean.ImMessage" >
+    insert into im_message
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mid != null" >
+        MID,
+      </if>
+      <if test="fromid != null" >
+        FROMID,
+      </if>
+      <if test="fromname != null" >
+        FROMNAME,
+      </if>
+      <if test="fromtype != null" >
+        FROMTYPE,
+      </if>
+      <if test="targetid != null" >
+        TARGETID,
+      </if>
+      <if test="targetname != null" >
+        TARGETNAME,
+      </if>
+      <if test="targettype != null" >
+        TARGETTYPE,
+      </if>
+      <if test="msgtext != null" >
+        MSGTEXT,
+      </if>
+      <if test="msgextras != null" >
+        MSGEXTRAS,
+      </if>
+      <if test="msgtype != null" >
+        MSGTYPE,
+      </if>
+      <if test="msgtime != null" >
+        MSGTIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mid != null" >
+        #{mid,jdbcType=VARCHAR},
+      </if>
+      <if test="fromid != null" >
+        #{fromid,jdbcType=INTEGER},
+      </if>
+      <if test="fromname != null" >
+        #{fromname,jdbcType=VARCHAR},
+      </if>
+      <if test="fromtype != null" >
+        #{fromtype,jdbcType=VARCHAR},
+      </if>
+      <if test="targetid != null" >
+        #{targetid,jdbcType=INTEGER},
+      </if>
+      <if test="targetname != null" >
+        #{targetname,jdbcType=VARCHAR},
+      </if>
+      <if test="targettype != null" >
+        #{targettype,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtext != null" >
+        #{msgtext,jdbcType=VARCHAR},
+      </if>
+      <if test="msgextras != null" >
+        #{msgextras,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtype != null" >
+        #{msgtype,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtime != null" >
+        #{msgtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wzc.im.bean.ImMessageExample" resultType="java.lang.Integer" >
+    select count(*) from im_message
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update im_message
+    <set >
+      <if test="record.mid != null" >
+        MID = #{record.mid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromid != null" >
+        FROMID = #{record.fromid,jdbcType=INTEGER},
+      </if>
+      <if test="record.fromname != null" >
+        FROMNAME = #{record.fromname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fromtype != null" >
+        FROMTYPE = #{record.fromtype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.targetid != null" >
+        TARGETID = #{record.targetid,jdbcType=INTEGER},
+      </if>
+      <if test="record.targetname != null" >
+        TARGETNAME = #{record.targetname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.targettype != null" >
+        TARGETTYPE = #{record.targettype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.msgtext != null" >
+        MSGTEXT = #{record.msgtext,jdbcType=VARCHAR},
+      </if>
+      <if test="record.msgextras != null" >
+        MSGEXTRAS = #{record.msgextras,jdbcType=VARCHAR},
+      </if>
+      <if test="record.msgtype != null" >
+        MSGTYPE = #{record.msgtype,jdbcType=VARCHAR},
+      </if>
+      <if test="record.msgtime != null" >
+        MSGTIME = #{record.msgtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update im_message
+    set MID = #{record.mid,jdbcType=VARCHAR},
+      FROMID = #{record.fromid,jdbcType=INTEGER},
+      FROMNAME = #{record.fromname,jdbcType=VARCHAR},
+      FROMTYPE = #{record.fromtype,jdbcType=VARCHAR},
+      TARGETID = #{record.targetid,jdbcType=INTEGER},
+      TARGETNAME = #{record.targetname,jdbcType=VARCHAR},
+      TARGETTYPE = #{record.targettype,jdbcType=VARCHAR},
+      MSGTEXT = #{record.msgtext,jdbcType=VARCHAR},
+      MSGEXTRAS = #{record.msgextras,jdbcType=VARCHAR},
+      MSGTYPE = #{record.msgtype,jdbcType=VARCHAR},
+      MSGTIME = #{record.msgtime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wzc.im.bean.ImMessage" >
+    update im_message
+    <set >
+      <if test="fromid != null" >
+        FROMID = #{fromid,jdbcType=INTEGER},
+      </if>
+      <if test="fromname != null" >
+        FROMNAME = #{fromname,jdbcType=VARCHAR},
+      </if>
+      <if test="fromtype != null" >
+        FROMTYPE = #{fromtype,jdbcType=VARCHAR},
+      </if>
+      <if test="targetid != null" >
+        TARGETID = #{targetid,jdbcType=INTEGER},
+      </if>
+      <if test="targetname != null" >
+        TARGETNAME = #{targetname,jdbcType=VARCHAR},
+      </if>
+      <if test="targettype != null" >
+        TARGETTYPE = #{targettype,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtext != null" >
+        MSGTEXT = #{msgtext,jdbcType=VARCHAR},
+      </if>
+      <if test="msgextras != null" >
+        MSGEXTRAS = #{msgextras,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtype != null" >
+        MSGTYPE = #{msgtype,jdbcType=VARCHAR},
+      </if>
+      <if test="msgtime != null" >
+        MSGTIME = #{msgtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where MID = #{mid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wzc.im.bean.ImMessage" >
+    update im_message
+    set FROMID = #{fromid,jdbcType=INTEGER},
+      FROMNAME = #{fromname,jdbcType=VARCHAR},
+      FROMTYPE = #{fromtype,jdbcType=VARCHAR},
+      TARGETID = #{targetid,jdbcType=INTEGER},
+      TARGETNAME = #{targetname,jdbcType=VARCHAR},
+      TARGETTYPE = #{targettype,jdbcType=VARCHAR},
+      MSGTEXT = #{msgtext,jdbcType=VARCHAR},
+      MSGEXTRAS = #{msgextras,jdbcType=VARCHAR},
+      MSGTYPE = #{msgtype,jdbcType=VARCHAR},
+      MSGTIME = #{msgtime,jdbcType=TIMESTAMP}
+    where MID = #{mid,jdbcType=VARCHAR}
+  </update>
+</mapper>

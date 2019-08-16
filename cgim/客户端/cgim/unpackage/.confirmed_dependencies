@@ -1,0 +1,512 @@
+{
+	"pages/index.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"pages/sub_message.html",
+			"libs/index.js",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf",
+			"images/himg8.jpg",
+			"css/bootstrap.min.css",
+			"fonts/glyphicons-halflings-regular.ttf",
+			"js/config.js",
+			"css/app.css"
+		],
+		"refer": [
+			"pages/sub_dynamic.html",
+			"pages/sub_contact.html",
+			"pages/sub_message.html",
+			"pages/myprofile.html",
+			"pages/sub_personal.html",
+			"pages/search.html",
+			"pages/chatpage.html",
+			"pages/profile.html",
+			"pages/sub_discover.html"
+		]
+	},
+	"pages/sub_contact.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"fonts/iconfont.ttf",
+			"images/himg7.jpg",
+			"images/himg5.jpg",
+			"images/himg4.jpg",
+			"images/himg6.jpg",
+			"images/group.png",
+			"fonts/mui.ttf",
+			"images/newfriend.jpg",
+			"libs/message.js",
+			"js/config.js",
+			"css/app.css"
+		],
+		"refer": [
+			"pages/profile.html",
+			"pages/groups.html",
+			"pages/newfriend.html"
+		]
+	},
+	"pages/sub_message.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"images/himg5.jpg",
+			"images/himg7.jpg",
+			"images/himg4.jpg",
+			"images/himg6.jpg",
+			"fonts/mui.ttf",
+			"libs/message.js",
+			"js/config.js",
+			"images/muwu.jpg",
+			"css/app.css",
+			"images/nullmsg.png"
+		],
+		"refer": [
+			"pages/chatpage.html",
+			"pages/newfriend.html"
+		]
+	},
+	"pages/sub_dynamic.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf",
+			"images/himg4.jpg",
+			"images/himg8.jpg"
+		],
+		"refer": [
+			"pages/frienddynamic.html",
+			"pages/goodarticle.html",
+			"pages/maplocation.html",
+			"pages/frienddynamic_main.html"
+		]
+	},
+	"pages/goodarticle.html": {
+		"resources": [
+			"fonts/glyphicons-halflings-regular.ttf",
+			"js/fingerprint.js",
+			"js/tts.min.js",
+			"js/tts_detail.js",
+			"css/bootstrap.min.css",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/app.css",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf"
+		]
+	},
+	"pages/frienddynamic.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"images/himg8.jpg",
+			"images/shuijiao.jpg",
+			"images/muwu.jpg",
+			"images/startbg.png",
+			"images/logo.png",
+			"css/app.css",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf",
+			"js/mui.zoom.js",
+			"css/imageview.css",
+			"js/mui.previewimage.js",
+			"libs/dynamic.js",
+			"js/config.js"
+		],
+		"refer": [
+			"pages/publish_dynamic.html"
+		]
+	},
+	"pages/maplocation.html": {
+		"resources": [
+			"libs/map.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/map.js"
+		]
+	},
+	"pages/frienddynamic_main.html": {
+		"resources": [
+			"pages/frienddynamic.html",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css"
+		],
+		"refer": [
+			"pages/frienddynamic.html"
+		]
+	},
+	"pages/sub_personal.html": {
+		"resources": [
+			"images/himg8.jpg",
+			"js/mui.min.js",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"fonts/iconfont.ttf",
+			"fonts/mui.ttf",
+			"js/config.js",
+			"css/app.css",
+			"images/logo.png",
+			"js/jquery.min.js",
+			"js/jquery.qrcode.min.js"
+		],
+		"refer": [
+			"pages/maplocation.html",
+			"pages/frienddynamic.html",
+			"pages/goodarticle.html",
+			"pages/erweimacard.html",
+			"pages/scan.html",
+			"pages/setting.html",
+			"pages/editprofile.html"
+		]
+	},
+	"pages/login.html": {
+		"resources": [
+			"images/loginbg.jpg",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"images/logo.jpg",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf",
+			"images/logo.png",
+			"fonts/mui.ttf",
+			"js/config.js",
+			"images/startbg.jpg",
+			"css/app.css"
+		],
+		"refer": [
+			"pages/index.html",
+			"pages/regist.html"
+		]
+	},
+	"pages/search.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js",
+			"css/app.css",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf",
+			"images/searchnow.gif"
+		],
+		"refer": [
+			"pages/searchresult.html",
+			"pages/search_group_result.html",
+			"pages/search_user_result.html"
+		]
+	},
+	"pages/regist.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/mui.picker.min.js",
+			"css/mui.picker.min.css",
+			"js/config.js",
+			"css/app.css",
+			"images/uploadphoto.png"
+		],
+		"refer": [
+			"pages/regist_ok.html",
+			"pages/index.html"
+		]
+	},
+	"pages/regist_ok.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"images/upload.png",
+			"js/config.js",
+			"css/app.css",
+			"images/uploadphoto.png"
+		]
+	},
+	"pages/profile.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js",
+			"images/loading2.gif",
+			"images/loading.gif",
+			"images/logo.png",
+			"css/app.css"
+		]
+	},
+	"pages/chatpage.html": {
+		"resources": [
+			"js/mui.imageViewer.js",
+			"images/loading2.gif",
+			"libs/chatpage.js",
+			"css/chatpage.css",
+			"js/arttmpl.js",
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js",
+			"images/logo.png",
+			"js/mui.zoom.js",
+			"js/mui.previewimage.js",
+			"css/mui.imageviewer.css",
+			"css/app.css",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf"
+		],
+		"refer": [
+			"pages/groupinfo.html"
+		]
+	},
+	"pages/start.html": {
+		"resources": [
+			"images/startbg.jpg",
+			"js/mui.min.js",
+			"css/mui.min.css",
+			"js/config.js",
+			"css/app.css",
+			"images/startbg.png",
+			"fonts/mui.ttf",
+			"images/loading3.gif"
+		],
+		"refer": [
+			"pages/regist.html",
+			"pages/login.html",
+			"pages/index.html"
+		]
+	},
+	"pages/groups.html": {
+		"resources": [
+			"images/logo.png",
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js"
+		],
+		"refer": [
+			"pages/creatgroup.html"
+		]
+	},
+	"pages/creatgroup.html": {
+		"resources": [
+			"images/upload.png",
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js"
+		],
+		"refer": [
+			"pages/selectuser.html"
+		]
+	},
+	"pages/selectuser.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js",
+			"images/logo.png"
+		]
+	},
+	"pages/groupinfo.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js",
+			"images/logo.png",
+			"images/upload.png",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf",
+			"js/jquery.min.js",
+			"js/jquery.qrcode.min.js"
+		]
+	},
+	"pages/erweimacard.html": {
+		"resources": [
+			"js/jquery.min.js",
+			"js/jquery.qrcode.min.js",
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js"
+		]
+	},
+	"pages/scan.html": {
+		"resources": [
+			"js/jquery.min.js",
+			"js/mui.min.js",
+			"css/app.css",
+			"css/mui.min.css",
+			"js/config.js",
+			"fonts/mui.ttf"
+		]
+	},
+	"pages/searchresult.html": {
+		"resources": [
+			"images/logo.png",
+			"js/mui.min.js",
+			"css/app.css",
+			"css/mui.min.css",
+			"js/config.js",
+			"fonts/mui.ttf"
+		]
+	},
+	"pages/sub_discover.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/app.css",
+			"images/newfriend.jpg",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"images/group.png",
+			"css/mui.min.css",
+			"js/config.js",
+			"images/dingwei.png",
+			"images/yaoyiyao.png",
+			"images/saoyisao.png",
+			"images/pengyouquan.png",
+			"images/jingxuan.png",
+			"images/more.png",
+			"images/qiandao.png"
+		],
+		"refer": [
+			"pages/scan.html",
+			"pages/maplocation.html",
+			"pages/frienddynamic.html",
+			"pages/goodarticle.html",
+			"pages/signin.html",
+			"pages/signlist.html"
+		]
+	},
+	"pages/setting.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/app.css"
+		]
+	},
+	"pages/search_group_result.html": {
+		"resources": [
+			"images/logo.png",
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js"
+		]
+	},
+	"pages/search_user_result.html": {
+		"resources": [
+			"images/logo.png",
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js"
+		]
+	},
+	"pages/newfriend.html": {
+		"resources": [
+			"images/logo.png",
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js"
+		]
+	},
+	"pages/publish_dynamic.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/iconfont.css",
+			"css/mui.min.css",
+			"fonts/iconfont.ttf",
+			"js/config.js",
+			"images/upload.png"
+		]
+	},
+	"pages/signin.html": {
+		"resources": [
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js",
+			"js/jquery.min.js",
+			"js/jquery.qrcode.min.js"
+		],
+		"refer": [
+			"pages/signdetail.html",
+			"pages/publish_sign.html"
+		]
+	},
+	"pages/signdetail.html": {
+		"resources": [
+			"images/dingwei.png",
+			"js/mui.min.js",
+			"css/app.css",
+			"images/newfriend.jpg",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/config.js"
+		]
+	},
+	"pages/publish_sign.html": {
+		"resources": [
+			"js/mui.min.js",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/app.css",
+			"css/iconfont.css",
+			"fonts/iconfont.ttf",
+			"js/mui.picker.min.js",
+			"css/mui.picker.min.css",
+			"js/config.js"
+		]
+	},
+	"pages/signlist.html": {
+		"resources": [
+			"js/jquery.min.js",
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"js/jquery.qrcode.min.js",
+			"js/config.js"
+		],
+		"refer": [
+			"pages/publish_sign.html",
+			"pages/signdetail.html"
+		]
+	},
+	"pages/editprofile.html": {
+		"resources": [
+			"js/mui.picker.min.js",
+			"js/mui.min.js",
+			"css/app.css",
+			"fonts/mui.ttf",
+			"css/mui.min.css",
+			"css/mui.picker.min.css",
+			"js/config.js",
+			"js/mui.poppicker.js",
+			"css/mui.poppicker.css"
+		]
+	}
+}

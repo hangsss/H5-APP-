@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wzc.im.dao.ImUserMapper" >
+  <resultMap id="BaseResultMap" type="com.wzc.im.bean.ImUser" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="UIMG" property="uimg" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="REMARKNAME" property="remarkname" jdbcType="VARCHAR" />
+    <result column="PASSWORD" property="password" jdbcType="VARCHAR" />
+    <result column="CELLPHONE" property="cellphone" jdbcType="VARCHAR" />
+    <result column="BIRTHDAY" property="birthday" jdbcType="DATE" />
+    <result column="GENDER" property="gender" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="VARCHAR" />
+    <result column="ADDRESS" property="address" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="HOBBY" property="hobby" jdbcType="VARCHAR" />
+    <result column="SIGNATURE" property="signature" jdbcType="VARCHAR" />
+    <result column="FRIENDS" property="friends" jdbcType="VARCHAR" />
+    <result column="GROUPS" property="groups" jdbcType="VARCHAR" />
+    <result column="TALKLIST" property="talklist" jdbcType="VARCHAR" />
+    <result column="ONLINETIME" property="onlinetime" jdbcType="TIMESTAMP" />
+    <result column="OFFLINETIME" property="offlinetime" jdbcType="TIMESTAMP" />
+    <result column="SCRAP" property="scrap" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.wzc.im.bean.ImUser" extends="BaseResultMap" >
+    <result column="OFFLINELOGS" property="offlinelogs" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, UIMG, NAME, REMARKNAME, PASSWORD, CELLPHONE, BIRTHDAY, GENDER, AGE, ADDRESS, 
+    EMAIL, HOBBY, SIGNATURE, FRIENDS, GROUPS, TALKLIST, ONLINETIME, OFFLINETIME, SCRAP
+  </sql>
+  <sql id="Blob_Column_List" >
+    OFFLINELOGS
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.wzc.im.bean.ImUserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from im_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wzc.im.bean.ImUserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from im_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from im_user
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from im_user
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wzc.im.bean.ImUserExample" >
+    delete from im_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wzc.im.bean.ImUser" >
+    insert into im_user (ID, UIMG, NAME, 
+      REMARKNAME, PASSWORD, CELLPHONE, 
+      BIRTHDAY, GENDER, AGE, 
+      ADDRESS, EMAIL, HOBBY, 
+      SIGNATURE, FRIENDS, GROUPS, 
+      TALKLIST, ONLINETIME, OFFLINETIME, 
+      SCRAP, OFFLINELOGS)
+    values (#{id,jdbcType=INTEGER}, #{uimg,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{remarkname,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{cellphone,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=DATE}, #{gender,jdbcType=VARCHAR}, #{age,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{hobby,jdbcType=VARCHAR}, 
+      #{signature,jdbcType=VARCHAR}, #{friends,jdbcType=VARCHAR}, #{groups,jdbcType=VARCHAR}, 
+      #{talklist,jdbcType=VARCHAR}, #{onlinetime,jdbcType=TIMESTAMP}, #{offlinetime,jdbcType=TIMESTAMP}, 
+      #{scrap,jdbcType=VARCHAR}, #{offlinelogs,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.wzc.im.bean.ImUser" >
+    insert into im_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="uimg != null" >
+        UIMG,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="remarkname != null" >
+        REMARKNAME,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="cellphone != null" >
+        CELLPHONE,
+      </if>
+      <if test="birthday != null" >
+        BIRTHDAY,
+      </if>
+      <if test="gender != null" >
+        GENDER,
+      </if>
+      <if test="age != null" >
+        AGE,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="hobby != null" >
+        HOBBY,
+      </if>
+      <if test="signature != null" >
+        SIGNATURE,
+      </if>
+      <if test="friends != null" >
+        FRIENDS,
+      </if>
+      <if test="groups != null" >
+        GROUPS,
+      </if>
+      <if test="talklist != null" >
+        TALKLIST,
+      </if>
+      <if test="onlinetime != null" >
+        ONLINETIME,
+      </if>
+      <if test="offlinetime != null" >
+        OFFLINETIME,
+      </if>
+      <if test="scrap != null" >
+        SCRAP,
+      </if>
+      <if test="offlinelogs != null" >
+        OFFLINELOGS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uimg != null" >
+        #{uimg,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="remarkname != null" >
+        #{remarkname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="cellphone != null" >
+        #{cellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="hobby != null" >
+        #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null" >
+        #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="friends != null" >
+        #{friends,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null" >
+        #{groups,jdbcType=VARCHAR},
+      </if>
+      <if test="talklist != null" >
+        #{talklist,jdbcType=VARCHAR},
+      </if>
+      <if test="onlinetime != null" >
+        #{onlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offlinetime != null" >
+        #{offlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scrap != null" >
+        #{scrap,jdbcType=VARCHAR},
+      </if>
+      <if test="offlinelogs != null" >
+        #{offlinelogs,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wzc.im.bean.ImUserExample" resultType="java.lang.Integer" >
+    select count(*) from im_user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update im_user
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.uimg != null" >
+        UIMG = #{record.uimg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        NAME = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remarkname != null" >
+        REMARKNAME = #{record.remarkname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null" >
+        PASSWORD = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cellphone != null" >
+        CELLPHONE = #{record.cellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birthday != null" >
+        BIRTHDAY = #{record.birthday,jdbcType=DATE},
+      </if>
+      <if test="record.gender != null" >
+        GENDER = #{record.gender,jdbcType=VARCHAR},
+      </if>
+      <if test="record.age != null" >
+        AGE = #{record.age,jdbcType=VARCHAR},
+      </if>
+      <if test="record.address != null" >
+        ADDRESS = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null" >
+        EMAIL = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hobby != null" >
+        HOBBY = #{record.hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signature != null" >
+        SIGNATURE = #{record.signature,jdbcType=VARCHAR},
+      </if>
+      <if test="record.friends != null" >
+        FRIENDS = #{record.friends,jdbcType=VARCHAR},
+      </if>
+      <if test="record.groups != null" >
+        GROUPS = #{record.groups,jdbcType=VARCHAR},
+      </if>
+      <if test="record.talklist != null" >
+        TALKLIST = #{record.talklist,jdbcType=VARCHAR},
+      </if>
+      <if test="record.onlinetime != null" >
+        ONLINETIME = #{record.onlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.offlinetime != null" >
+        OFFLINETIME = #{record.offlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.scrap != null" >
+        SCRAP = #{record.scrap,jdbcType=VARCHAR},
+      </if>
+      <if test="record.offlinelogs != null" >
+        OFFLINELOGS = #{record.offlinelogs,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update im_user
+    set ID = #{record.id,jdbcType=INTEGER},
+      UIMG = #{record.uimg,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      REMARKNAME = #{record.remarkname,jdbcType=VARCHAR},
+      PASSWORD = #{record.password,jdbcType=VARCHAR},
+      CELLPHONE = #{record.cellphone,jdbcType=VARCHAR},
+      BIRTHDAY = #{record.birthday,jdbcType=DATE},
+      GENDER = #{record.gender,jdbcType=VARCHAR},
+      AGE = #{record.age,jdbcType=VARCHAR},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
+      EMAIL = #{record.email,jdbcType=VARCHAR},
+      HOBBY = #{record.hobby,jdbcType=VARCHAR},
+      SIGNATURE = #{record.signature,jdbcType=VARCHAR},
+      FRIENDS = #{record.friends,jdbcType=VARCHAR},
+      GROUPS = #{record.groups,jdbcType=VARCHAR},
+      TALKLIST = #{record.talklist,jdbcType=VARCHAR},
+      ONLINETIME = #{record.onlinetime,jdbcType=TIMESTAMP},
+      OFFLINETIME = #{record.offlinetime,jdbcType=TIMESTAMP},
+      SCRAP = #{record.scrap,jdbcType=VARCHAR},
+      OFFLINELOGS = #{record.offlinelogs,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update im_user
+    set ID = #{record.id,jdbcType=INTEGER},
+      UIMG = #{record.uimg,jdbcType=VARCHAR},
+      NAME = #{record.name,jdbcType=VARCHAR},
+      REMARKNAME = #{record.remarkname,jdbcType=VARCHAR},
+      PASSWORD = #{record.password,jdbcType=VARCHAR},
+      CELLPHONE = #{record.cellphone,jdbcType=VARCHAR},
+      BIRTHDAY = #{record.birthday,jdbcType=DATE},
+      GENDER = #{record.gender,jdbcType=VARCHAR},
+      AGE = #{record.age,jdbcType=VARCHAR},
+      ADDRESS = #{record.address,jdbcType=VARCHAR},
+      EMAIL = #{record.email,jdbcType=VARCHAR},
+      HOBBY = #{record.hobby,jdbcType=VARCHAR},
+      SIGNATURE = #{record.signature,jdbcType=VARCHAR},
+      FRIENDS = #{record.friends,jdbcType=VARCHAR},
+      GROUPS = #{record.groups,jdbcType=VARCHAR},
+      TALKLIST = #{record.talklist,jdbcType=VARCHAR},
+      ONLINETIME = #{record.onlinetime,jdbcType=TIMESTAMP},
+      OFFLINETIME = #{record.offlinetime,jdbcType=TIMESTAMP},
+      SCRAP = #{record.scrap,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wzc.im.bean.ImUser" >
+    update im_user
+    <set >
+      <if test="uimg != null" >
+        UIMG = #{uimg,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="remarkname != null" >
+        REMARKNAME = #{remarkname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="cellphone != null" >
+        CELLPHONE = #{cellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        BIRTHDAY = #{birthday,jdbcType=DATE},
+      </if>
+      <if test="gender != null" >
+        GENDER = #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        AGE = #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        ADDRESS = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="hobby != null" >
+        HOBBY = #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null" >
+        SIGNATURE = #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="friends != null" >
+        FRIENDS = #{friends,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null" >
+        GROUPS = #{groups,jdbcType=VARCHAR},
+      </if>
+      <if test="talklist != null" >
+        TALKLIST = #{talklist,jdbcType=VARCHAR},
+      </if>
+      <if test="onlinetime != null" >
+        ONLINETIME = #{onlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offlinetime != null" >
+        OFFLINETIME = #{offlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scrap != null" >
+        SCRAP = #{scrap,jdbcType=VARCHAR},
+      </if>
+      <if test="offlinelogs != null" >
+        OFFLINELOGS = #{offlinelogs,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.wzc.im.bean.ImUser" >
+    update im_user
+    set UIMG = #{uimg,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      REMARKNAME = #{remarkname,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      CELLPHONE = #{cellphone,jdbcType=VARCHAR},
+      BIRTHDAY = #{birthday,jdbcType=DATE},
+      GENDER = #{gender,jdbcType=VARCHAR},
+      AGE = #{age,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      HOBBY = #{hobby,jdbcType=VARCHAR},
+      SIGNATURE = #{signature,jdbcType=VARCHAR},
+      FRIENDS = #{friends,jdbcType=VARCHAR},
+      GROUPS = #{groups,jdbcType=VARCHAR},
+      TALKLIST = #{talklist,jdbcType=VARCHAR},
+      ONLINETIME = #{onlinetime,jdbcType=TIMESTAMP},
+      OFFLINETIME = #{offlinetime,jdbcType=TIMESTAMP},
+      SCRAP = #{scrap,jdbcType=VARCHAR},
+      OFFLINELOGS = #{offlinelogs,jdbcType=LONGVARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wzc.im.bean.ImUser" >
+    update im_user
+    set UIMG = #{uimg,jdbcType=VARCHAR},
+      NAME = #{name,jdbcType=VARCHAR},
+      REMARKNAME = #{remarkname,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      CELLPHONE = #{cellphone,jdbcType=VARCHAR},
+      BIRTHDAY = #{birthday,jdbcType=DATE},
+      GENDER = #{gender,jdbcType=VARCHAR},
+      AGE = #{age,jdbcType=VARCHAR},
+      ADDRESS = #{address,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      HOBBY = #{hobby,jdbcType=VARCHAR},
+      SIGNATURE = #{signature,jdbcType=VARCHAR},
+      FRIENDS = #{friends,jdbcType=VARCHAR},
+      GROUPS = #{groups,jdbcType=VARCHAR},
+      TALKLIST = #{talklist,jdbcType=VARCHAR},
+      ONLINETIME = #{onlinetime,jdbcType=TIMESTAMP},
+      OFFLINETIME = #{offlinetime,jdbcType=TIMESTAMP},
+      SCRAP = #{scrap,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insertAndGetId" useGeneratedKeys="true" keyProperty="id" parameterType="com.wzc.im.bean.ImUser" >
+    insert into im_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="uimg != null" >
+        UIMG,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="remarkname != null" >
+        REMARKNAME,
+      </if>
+      <if test="password != null" >
+        PASSWORD,
+      </if>
+      <if test="cellphone != null" >
+        CELLPHONE,
+      </if>
+      <if test="birthday != null" >
+        BIRTHDAY,
+      </if>
+      <if test="gender != null" >
+        GENDER,
+      </if>
+      <if test="age != null" >
+        AGE,
+      </if>
+      <if test="address != null" >
+        ADDRESS,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="hobby != null" >
+        HOBBY,
+      </if>
+      <if test="signature != null" >
+        SIGNATURE,
+      </if>
+      <if test="friends != null" >
+        FRIENDS,
+      </if>
+      <if test="groups != null" >
+        GROUPS,
+      </if>
+      <if test="talklist != null" >
+        TALKLIST,
+      </if>
+      <if test="onlinetime != null" >
+        ONLINETIME,
+      </if>
+      <if test="offlinetime != null" >
+        OFFLINETIME,
+      </if>
+      <if test="scrap != null" >
+        SCRAP,
+      </if>
+      <if test="offlinelogs != null" >
+        OFFLINELOGS,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="uimg != null" >
+        #{uimg,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="remarkname != null" >
+        #{remarkname,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="cellphone != null" >
+        #{cellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="birthday != null" >
+        #{birthday,jdbcType=DATE},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="hobby != null" >
+        #{hobby,jdbcType=VARCHAR},
+      </if>
+      <if test="signature != null" >
+        #{signature,jdbcType=VARCHAR},
+      </if>
+      <if test="friends != null" >
+        #{friends,jdbcType=VARCHAR},
+      </if>
+      <if test="groups != null" >
+        #{groups,jdbcType=VARCHAR},
+      </if>
+      <if test="talklist != null" >
+        #{talklist,jdbcType=VARCHAR},
+      </if>
+      <if test="onlinetime != null" >
+        #{onlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="offlinetime != null" >
+        #{offlinetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="scrap != null" >
+        #{scrap,jdbcType=VARCHAR},
+      </if>
+      <if test="offlinelogs != null" >
+        #{offlinelogs,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

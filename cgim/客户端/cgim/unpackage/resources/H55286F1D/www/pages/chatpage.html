@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" href="../css/mui.min.css"/>
+		<link rel="stylesheet" href="../css/app.css" />
+		<link rel="stylesheet" type="text/css" href="../css/iconfont.css"/>
+		<link rel="stylesheet" href="../css/chatpage.css" />
+		<link rel="stylesheet" href="../css/mui.imageviewer.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style type="text/css">
+			#mloading{
+				position: fixed;
+				top: 55px;
+				left: 50%;
+				margin-left: -9px;
+				height: 18px;
+			}
+		</style>
+	</head>
+
+	<body contextmenu="return false;">
+		<header class="mui-bar mui-bar-nav">
+		    <a class=" mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title" id="chattitle">加载中...</h1>
+		    <a class="mui-icon iconfont icon-qunzutianchong mui-pull-right"></a>
+		</header>
+		<img id="mloading" class="mui-hidden" src="../images/loading2.gif"/>
+		<pre id='h'></pre>
+		<script id='msg-template' type="text/template">
+			<% for(var i in record){ var item=record[i];%>
+				<div class="msg-item <%= (item.sender=='self'?' msg-item-self':'') %>" msg-type='<%=(item.type)%>' msg-content='<%=(item.content)%>'>
+					<% if(item.sender=='self' ) { %>
+						<img class="msg-user-img" src="<%=item.uimg %>" />
+					<% } else { %>
+						<img class="msg-user-img" src="<%=item.uimg %>" />
+					<% } %>
+					<div class="msg-username"><%=item.sendname%></div>
+					<div class="msg-content">
+						<div class="msg-content-inner">
+							<% if(item.type=='text' ) { %>
+								<%=( item.content|| '&nbsp;&nbsp;') %>
+							<% } else if(item.type=='image' ) { %>
+								<img class="msg-content-image" src="<%=(item.content)%>" style="max-width: 100px;" data-preview-group="1" />
+							<% } else if(item.type=='sound' ) { %>
+								<span class="mui-icon mui-icon-mic" style="font-size: 18px;font-weight: bold;"></span>
+								<span class="play-state">点击播放</span>
+							<% } %>
+						</div>
+						<div class="msg-content-arrow"></div>
+					</div>
+					<div class="mui-item-clear"></div>
+				</div>
+			<% } %>
+		</script>
+		<div class="mui-content">
+			<div id='msg-list'></div>
+		</div>
+		<footer>
+			<div class="footer-left">
+				<i id='msg-image' class="mui-icon mui-icon-camera" style="font-size: 28px;"></i>
+			</div>
+			<div class="footer-center">
+				<textarea id='msg-text' type="text" class='input-text'></textarea>
+				<button id='msg-sound' type="button" class='input-sound' style="display: none;">按住说话</button>
+			</div>
+			<label for="" class="footer-right">
+				<i id='msg-type' class="mui-icon mui-icon-mic"></i>
+			</label>
+		</footer>
+		<div id='sound-alert' class="rprogress">
+			<div class="rschedule"></div>
+			<div class="r-sigh">!</div>
+			<div id="audio_tips" class="rsalert">手指上滑，取消发送</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.imageViewer.js"></script>
+		<script src="../js/arttmpl.js"></script>
+		<script src="../libs/chatpage.js"></script>
+	</body>
+
+</html>

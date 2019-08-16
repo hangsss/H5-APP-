@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style type="text/css">
+			.mui-media-body{
+				font-size: 18px;
+				line-height: 45px;
+			}
+			.mui-table-view-cell {
+				padding: 11px 15px;
+			}
+			.mmodal{
+				position: fixed;
+				text-align: center;
+				font-size: 19px;
+				padding: 30px 0px;
+				z-index: 999;
+				top: 100px;
+				left: 12px;
+			}
+			.mui-backdrop {
+				position: fixed;
+				top: 0;
+				right: 0;
+				bottom: 0px;
+				left: 0;
+				z-index: 998;
+				background-color: rgba(0,0,0,0.5);
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">二维码名片</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view" style="margin-top: 20px;">
+				<li class="mui-table-view-cell mui-media">
+			        <img id="uimg" class="mui-media-object mui-pull-left" >
+			        <div id="uname" class="mui-media-body" ></div>
+			    </li>
+			    <li class="mui-table-view-cell" style="text-align: center;">
+			        <div id="output" style="margin: 30px;"></div>
+			    </li>
+			    <li class="mui-table-view-cell" style="text-align: center;">
+			    	扫一扫上面的二维码图案加我好友~
+			    </li>
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../js/jquery.qrcode.min.js" ></script>
+		<script type="text/javascript">
+			mui.init()
+			$(function(){
+				$('#output').qrcode("addfriend/"+user.id);
+				document.getElementById("uimg").src=sip+user.uimg;
+				document.getElementById("uname").innerHTML =user.name;
+			})
+		</script>
+	</body>
+
+</html>

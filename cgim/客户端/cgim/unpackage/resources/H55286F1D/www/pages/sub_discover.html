@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>通讯录</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style>
+			.mui-media-body{
+				font-size: 15px;
+				line-height: 28px;
+			}
+			.mui-table-view-cell {
+				padding: 11px 15px;
+			}
+			.mui-table-view .mui-media-object {
+			    height: 28px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<ul class="mui-table-view" >
+				<li class="mui-table-view-cell mui-media">
+			        <a href="frienddynamic.html" class="mui-navigate-right">
+			            <img class="mui-media-object mui-pull-left" src="../images/pengyouquan.png">
+			            <div class="mui-media-body">好友动态</div>
+			        </a>
+			    </li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 20px;">
+				<li class="mui-table-view-cell mui-media">
+			        <a href="scan.html" class="mui-navigate-right">
+			            <img class="mui-media-object mui-pull-left" src="../images/saoyisao.png">
+			            <div class="mui-media-body">扫一扫</div>
+			        </a>
+			    </li>
+			    <li class="mui-table-view-cell mui-media">
+			        <a href="#" class="mui-navigate-right">
+			            <img class="mui-media-object mui-pull-left" src="../images/yaoyiyao.png">
+			            <div class="mui-media-body">摇一摇</div>
+			        </a>
+			    </li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 20px;">
+			    <li class="mui-table-view-cell mui-media">
+			        <a href="signlist.html" class="mui-navigate-right">
+			            <img class="mui-media-object mui-pull-left" src="../images/qiandao.png">
+			            <div class="mui-media-body">考核签到</div>
+			        </a>
+			    </li>
+			    <li class="mui-table-view-cell mui-media">
+			        <a href="maplocation.html" class="mui-navigate-right">
+			            <img class="mui-media-object mui-pull-left" src="../images/dingwei.png">
+			            <div class="mui-media-body">当前定位</div>
+			        </a>
+			    </li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 20px;">
+				<li class="mui-table-view-cell mui-media">
+			        <a href="goodarticle.html" class="mui-navigate-right">
+			            <img class="mui-media-object mui-pull-left" src="../images/jingxuan.png" style="margin-left: -3px;">
+			            <div class="mui-media-body">每日精选</div>
+			        </a>
+			    </li>
+				<li class="mui-table-view-cell mui-media">
+			        <a href="#" class="mui-navigate-right">
+			            <img class="mui-media-object mui-pull-left" src="../images/more.png">
+			            <div class="mui-media-body">更多内容</div>
+			        </a>
+			    </li>
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({preloadPages:[{url:"maplocation.html",id:"maplocation.html"},
+				{url:"goodarticle.html",id:"goodarticle.html"}]});
+			mui(".mui-content").on("tap","a",function(){
+				var href = this.getAttribute("href");
+				if(href=="#"){
+					mui.toast("正在开发中，敬请期待！");
+				}else{
+					pagejump(href);
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/iconfont.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css"/>
+		<script src="../js/config.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			.mui-input-row{
+				height: 56px !important;
+				padding: 8px 0px;
+			}
+			label{
+				width: 30%;
+			}
+			.mui-input-clear{
+				width: 70%;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">创建签到</h1>
+		    <a  class="mui-pull-right mui-icon iconfont icon-yuanxingxuanzhong"></a>
+		</header>
+		<div class="mui-content">
+		    <form class="mui-input-group" style="padding-bottom: 9px;">
+		        <div class="mui-input-row">
+		            <label>签到标题</label>
+		            <input id="title" type="text" class="mui-input-clear" placeholder="签到标题">
+		        </div>
+		        <div class="mui-input-row">
+		            <label>开始时间</label>
+		            <input id="starttime" type="text" class="mui-input-clear selecttime" placeholder="请选择开始时间" readonly="readonly">
+		        </div>
+		        <div class="mui-input-row">
+		            <label>结束时间</label>
+		            <input id="endtime" type="text" class="mui-input-clear selecttime" placeholder="请选择结束时间" readonly="readonly" >
+		        </div>
+		        <div class="mui-input-row">
+		            <label>签到地点</label>
+		            <input id="address" type="text" class="mui-input-clear" placeholder="请输入签到地点">
+		        </div>
+		        <textarea id="content"  rows="15" style="width: 100%;" placeholder="备注..." ></textarea>
+		    </form>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+			//时间选择器
+			mui(".mui-content").on("tap",".selecttime",function(){
+				var obj =this;
+				var optionsJson = '{"beginYear":2010,"endYear":2030}';
+				var options = JSON.parse(optionsJson);
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {obj.value = rs.text;picker.dispose();});
+			});
+			var postdata={};
+			function setdata(){
+				postdata.createuserid=user.id;
+				postdata.createuser=user.name;
+				postdata.scontent=document.getElementById("content").value;
+				postdata.saddress=document.getElementById("address").value;
+				var title = document.getElementById("title").value;
+				var starttime = document.getElementById("starttime").value;
+				var endtime = document.getElementById("endtime").value;
+				if(title==""||title==null||title==undefined){
+					return false;
+				}else{
+					postdata.sname=title;
+				}
+				if(starttime==""||starttime==null||starttime==undefined){
+					return false;
+				}else{
+					postdata.kaishitime=starttime;
+				}
+				if(endtime==""||endtime==null||endtime==undefined){
+					return false;
+				}else{
+					postdata.jieshutime=endtime;
+				}
+				return true;
+			}
+			document.querySelector(".icon-yuanxingxuanzhong").addEventListener("tap",function(){
+				if(setdata()){
+					mui.post(sip+"publishSign.do",postdata,function(json){
+						if(json=="true"){
+							mui.toast("创建成功");
+							plus.webview.getWebviewById("signlist.html").evalJS("getMysignList()");
+							mui.back();
+						}
+					});
+				}else{
+					mui.toast("请填写完整信息");
+				}
+			});
+			
+		</script>
+	</body>
+
+</html>

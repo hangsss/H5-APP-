@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<script src="../js/config.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">考核列表</h1>
+		    <a class="mui-icon mui-icon-plus mui-pull-right"></a>
+		</header>
+		<div class="mui-content"></div>
+		<div class="mmodal mui-card mui-hidden">
+			<div id="output" style="margin: 30px;"></div>扫一扫上面的二维码签到
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../js/jquery.min.js" ></script>
+		<script type="text/javascript" src="../js/jquery.qrcode.min.js" ></script>
+		<script type="text/javascript">
+			mui.init()
+			document.querySelector(".mui-pull-right").addEventListener("tap",function(){
+				pagejump("publish_sign.html");
+			})
+			mui(".mui-content").on("tap",".signdetail",function(){
+				var cardid = this.parentNode.parentNode.id;
+				firejump("signdetail.html","sendID",{sid:cardid});
+			});
+			//二维码显示
+			var modal = document.querySelector(".mmodal");
+			var mask = mui.createMask(closemodal);
+			function closemodal(){modal.classList.add("mui-hidden");}
+			mui(".mui-content").on("tap",".erweima",function(){
+				var cardid = this.parentNode.parentNode.id;
+				$('#output').qrcode("scansign/"+cardid);
+				mask.show();
+				modal.classList.remove("mui-hidden");
+			});
+			mui.plusReady(function(){
+				getMysignList();
+			});
+			function getMysignList(){
+				mui.post(sip+"signList.do",{id:user.id},function(json){
+					document.querySelector(".mui-content").innerHTML="<center style='margin: 100px 0px;'>加载中...</center>";
+					if(json!=null&&json!="[]"){
+						document.querySelector(".mui-content").innerHTML="";
+						var signlist = JSON.parse(json);
+						for(var i=0;i<signlist.length;i++){
+							var sign = signlist[i];
+							var card = document.createElement("div");
+							card.className="mui-card";
+							card.id=sign.sid;
+							card.innerHTML='<div class="mui-card-header">'+sign.sname+'</div><div class="mui-card-content"><div class="mui-card-content-inner">'+
+							'<p>创建人：'+sign.createuser+'</p><p>签到地点：'+sign.saddress+'</p><p>开始时间：'+sign.starttime+'</p><p>结束时间：'+sign.endtime+'</p><p>备注：'+(sign.scontent||"无")+'</p></div></div>'+
+							'<div class="mui-card-footer"><a class="mui-card-link signdetail">查看签到人列表</a><a class="mui-card-link erweima">查看二维码</a></div>';
+							document.querySelector(".mui-content").appendChild(card);
+						}
+					}else{
+						document.querySelector(".mui-content").innerHTML="<center>暂无数据</center>"
+					}
+				})
+			}
+		</script>
+	</body>
+
+</html>

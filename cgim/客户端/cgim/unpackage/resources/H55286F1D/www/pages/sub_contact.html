@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>通讯录</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style>
+			.mui-media-body{
+				font-size: 15px;
+				line-height: 35px;
+			}
+			.mui-table-view-cell {
+				padding: 9px 15px;
+			}
+			.mui-table-view .mui-media-object {
+			    max-width: 35px;
+			    height: 35px;
+			    border-radius: 3px;
+			}
+			.mui-content>.mui-table-view:first-child {
+			    margin-top: 0px;
+			}
+			.rotate{-webkit-transition:-webkit-transform 2s;} 
+			.rotate:hover{-webkit-transform:rotate(1080deg);}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<ul id="others" class="mui-table-view">
+				<li class="mui-table-view-cell mui-media">
+			        <a href="groups.html" class="mui-navigate-right"><!--onclick="tochat(123,1,'幸福')"-->
+			            <img class="mui-media-object mui-pull-left" src="../images/group.png">
+			            <div class="mui-media-body">我的群组</div>
+			        </a>
+			    </li>
+			    <li class="mui-table-view-cell mui-media">
+			        <a href="newfriend.html" class="mui-navigate-right"><!--onclick="tochat(123,1,'幸福')"-->
+			            <img class="mui-media-object mui-pull-left" src="../images/newfriend.jpg">
+			            <div class="mui-media-body">新的朋友</div>
+			            <span class="mui-badge mui-badge-red mui-hidden"></span>
+			        </a>
+			    </li>
+			</ul>
+			<p class="mui-content-padded" style="margin:6px 10px;">我的好友 <span class="mui-icon mui-icon-refreshempty mui-pull-right rotate"></span></p>
+		    <ul class="mui-table-view" id="contacts" style="padding-right: 10px;"></ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({preloadPages:[
+				{url:"groups.html",id:"groups.html"},
+				{url:"newfriend.html",id:"newfriend.html"}]});
+			var userlist=null;
+			mui.plusReady(function(){
+				plus.webview.currentWebview().setStyle({scrollIndicator:'none'});
+				getMyFriends();
+			});
+			document.querySelector(".mui-icon-refreshempty").addEventListener("tap",function(){
+				getMyFriends();
+			});
+			function getMyFriends(){
+				mui.post(sip+"getMyFriends.do",{id:user.id},function( data ) {
+					if(data!="[]"){
+						userlist = eval(data);
+						refreshcontacts(); 
+					}else{
+						mui.toast("暂无好友信息");
+					}
+				});
+			}
+			function refreshcontacts() {
+				var table = document.getElementById("contacts");
+				table.innerHTML="";
+				for(var i=0;i<userlist.length;i++){
+					var suser = userlist[i];
+					if(suser.id!=user.id){
+						var li = document.createElement('li');
+						var imgpath =sip+suser.uimg
+						li.className = 'mui-table-view-cell mui-media';
+						li.innerHTML='<a href="javascript:void(0)" onclick="toprofile('+i+')">'+
+									'<img class="mui-media-object mui-pull-left" src="'+imgpath+'">'+
+									'<div class="mui-media-body">'+suser.name+'</div></a>';
+						table.appendChild(li);
+					}
+				}
+				
+			}
+			function toprofile(num){
+				firejump("profile.html","toprofile",{userinfo:userlist[num]});
+			}
+			mui("#others").on("tap","a",function(){
+				var target = this.getAttribute("href");
+				mui.openWindow({url:target,id:target});
+				if(target=="newfriend.html"){
+					removeapply();
+				}
+			});
+			var badge = document.getElementById("others").querySelector(".mui-badge");
+			function showapply(){
+				if(badge.classList.contains("mui-hidden")){
+					badge.classList.remove("mui-hidden");
+				}
+				if(badge.innerHTML==""){
+					badge.innerHTML="1";
+				}else{
+					badge.innerHTML=parseInt(badge.innerHTML)+1;
+				}
+			}
+			function removeapply(){
+				if(!badge.classList.contains("mui-hidden")){
+					badge.innerHTML=0;
+					badge.classList.add("mui-hidden");
+				}
+				plus.webview.getWebviewById("index.html").evalJS("removebadge('apply')");
+			}
+		</script>
+	</body>
+
+</html>

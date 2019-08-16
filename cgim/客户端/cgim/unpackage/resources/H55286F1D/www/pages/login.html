@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style type="text/css">
+			html,body,.mui-content{
+				background: white;
+				height: 100%;
+			}
+			/*#username,#password{
+				background: transparent;
+				border: 0px;
+				border-radius: 0px;
+				border-bottom:1px solid rgba(0,0,0,0.2);
+			}
+			.mui-col-xs-1 span{
+				font-size: 28px;color:#8f8f94;
+			}*/
+			.mui-input-row{
+				height: 56px !important;
+				padding: 8px 0px;
+			}
+			.mui-input-group label {
+				width: 22%;
+			}
+			.mui-input-row label~input,
+			.mui-input-row label~select,
+			.mui-input-row label~textarea {width: 78%;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">登录</h1>
+		</header>
+		<div class="mui-content">
+			<form class="mui-input-group">
+				<div class="mui-input-row">
+					<label>账号</label>
+					<input id="username" type="number" type="text" class="mui-input-clear mui-input" placeholder="请输入昵称">
+				</div>
+				<div class="mui-input-row">
+					<label>密码</label>
+					<input id='password' type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+				</div>
+			</form>
+			<div class="mui-content-padded">
+				<button type="button" class="mui-btn mui-btn-green mui-btn-block" >登录</button>
+			</div>
+			<div class="mui-content-padded">
+				<p style="font-size: 15px;color:#8f8f94;">忘记密码?</p>
+			</div>
+		</div>
+		
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function() {
+				plus.navigator.setStatusBarBackground("#2c2c2c");
+			});
+			mui(document.body).on('tap', '.mui-btn', function(e) {
+				mui(this).button('loading');
+				ajaxlogin();
+			});
+			function ajaxlogin(){
+	        	mui.ajax(sip+'login.do',{
+					data:{
+						username:mui("#username")[0].value,
+						password:mui("#password")[0].value
+					},
+					type:'post',//HTTP请求类型
+					timeout:10000,//超时时间设置为10秒；
+					success:function(data){
+						console.info(data);
+						if(data!="null"){
+							window.localStorage.setItem("user","("+data+")");
+							mui.preload({url:"index.html",id:"index.html"});
+							setTimeout(function() {
+								mui.openWindow({url:'index.html',id:'index.html'});
+							}, 2000);
+					   	}else{
+					   		 mui(".mui-btn-green").button('reset');
+					   		 mui.toast('账号或密码错误');
+					   	}
+					},
+					error:function(XMLHttpRequest, textStatus, errorThrown){
+						mui(".mui-btn-green").button('reset');
+						if(textStatus=="timeout"){
+							mui.toast("连接超时");
+						}else if(textStatus=="error"){
+							mui.toast("连接出错");
+						}
+					}
+				});
+	       }
+		</script>
+	</body>
+
+</html>

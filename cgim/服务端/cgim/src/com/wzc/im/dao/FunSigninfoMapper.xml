@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wzc.im.dao.FunSigninfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wzc.im.bean.FunSigninfo" >
+    <id column="SID" property="sid" jdbcType="VARCHAR" />
+    <result column="SNAME" property="sname" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="CREATEUSERID" property="createuserid" jdbcType="VARCHAR" />
+    <result column="CREATEUSER" property="createuser" jdbcType="VARCHAR" />
+    <result column="SCONTENT" property="scontent" jdbcType="VARCHAR" />
+    <result column="SADDRESS" property="saddress" jdbcType="VARCHAR" />
+    <result column="STARTTIME" property="starttime" jdbcType="TIMESTAMP" />
+    <result column="ENDTIME" property="endtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    SID, SNAME, CREATETIME, CREATEUSERID, CREATEUSER, SCONTENT, SADDRESS, STARTTIME, 
+    ENDTIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wzc.im.bean.FunSigninfoExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from fun_signinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from fun_signinfo
+    where SID = #{sid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from fun_signinfo
+    where SID = #{sid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wzc.im.bean.FunSigninfoExample" >
+    delete from fun_signinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wzc.im.bean.FunSigninfo" >
+    insert into fun_signinfo (SID, SNAME, CREATETIME, 
+      CREATEUSERID, CREATEUSER, SCONTENT, 
+      SADDRESS, STARTTIME, ENDTIME
+      )
+    values (#{sid,jdbcType=VARCHAR}, #{sname,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, 
+      #{createuserid,jdbcType=VARCHAR}, #{createuser,jdbcType=VARCHAR}, #{scontent,jdbcType=VARCHAR}, 
+      #{saddress,jdbcType=VARCHAR}, #{starttime,jdbcType=TIMESTAMP}, #{endtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wzc.im.bean.FunSigninfo" >
+    insert into fun_signinfo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        SID,
+      </if>
+      <if test="sname != null" >
+        SNAME,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="createuserid != null" >
+        CREATEUSERID,
+      </if>
+      <if test="createuser != null" >
+        CREATEUSER,
+      </if>
+      <if test="scontent != null" >
+        SCONTENT,
+      </if>
+      <if test="saddress != null" >
+        SADDRESS,
+      </if>
+      <if test="starttime != null" >
+        STARTTIME,
+      </if>
+      <if test="endtime != null" >
+        ENDTIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sid != null" >
+        #{sid,jdbcType=VARCHAR},
+      </if>
+      <if test="sname != null" >
+        #{sname,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuserid != null" >
+        #{createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="createuser != null" >
+        #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="scontent != null" >
+        #{scontent,jdbcType=VARCHAR},
+      </if>
+      <if test="saddress != null" >
+        #{saddress,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        #{endtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wzc.im.bean.FunSigninfoExample" resultType="java.lang.Integer" >
+    select count(*) from fun_signinfo
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update fun_signinfo
+    <set >
+      <if test="record.sid != null" >
+        SID = #{record.sid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sname != null" >
+        SNAME = #{record.sname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null" >
+        CREATETIME = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createuserid != null" >
+        CREATEUSERID = #{record.createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createuser != null" >
+        CREATEUSER = #{record.createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scontent != null" >
+        SCONTENT = #{record.scontent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.saddress != null" >
+        SADDRESS = #{record.saddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.starttime != null" >
+        STARTTIME = #{record.starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.endtime != null" >
+        ENDTIME = #{record.endtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update fun_signinfo
+    set SID = #{record.sid,jdbcType=VARCHAR},
+      SNAME = #{record.sname,jdbcType=VARCHAR},
+      CREATETIME = #{record.createtime,jdbcType=TIMESTAMP},
+      CREATEUSERID = #{record.createuserid,jdbcType=VARCHAR},
+      CREATEUSER = #{record.createuser,jdbcType=VARCHAR},
+      SCONTENT = #{record.scontent,jdbcType=VARCHAR},
+      SADDRESS = #{record.saddress,jdbcType=VARCHAR},
+      STARTTIME = #{record.starttime,jdbcType=TIMESTAMP},
+      ENDTIME = #{record.endtime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wzc.im.bean.FunSigninfo" >
+    update fun_signinfo
+    <set >
+      <if test="sname != null" >
+        SNAME = #{sname,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuserid != null" >
+        CREATEUSERID = #{createuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="createuser != null" >
+        CREATEUSER = #{createuser,jdbcType=VARCHAR},
+      </if>
+      <if test="scontent != null" >
+        SCONTENT = #{scontent,jdbcType=VARCHAR},
+      </if>
+      <if test="saddress != null" >
+        SADDRESS = #{saddress,jdbcType=VARCHAR},
+      </if>
+      <if test="starttime != null" >
+        STARTTIME = #{starttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endtime != null" >
+        ENDTIME = #{endtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where SID = #{sid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wzc.im.bean.FunSigninfo" >
+    update fun_signinfo
+    set SNAME = #{sname,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      CREATEUSERID = #{createuserid,jdbcType=VARCHAR},
+      CREATEUSER = #{createuser,jdbcType=VARCHAR},
+      SCONTENT = #{scontent,jdbcType=VARCHAR},
+      SADDRESS = #{saddress,jdbcType=VARCHAR},
+      STARTTIME = #{starttime,jdbcType=TIMESTAMP},
+      ENDTIME = #{endtime,jdbcType=TIMESTAMP}
+    where SID = #{sid,jdbcType=VARCHAR}
+  </update>
+</mapper>

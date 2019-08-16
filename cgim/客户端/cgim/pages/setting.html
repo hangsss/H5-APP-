@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">设置</h1>
+		</header>
+		<div class="mui-content">
+			<h5 class="mui-content-padded">朗读声音</h5>
+		   	<ul class="mui-table-view mui-table-view-radio">
+				<li id="boy" class="mui-table-view-cell ">
+					<a class="mui-navigate-right">男声</a>
+				</li>
+				<li id="girl" class="mui-table-view-cell">
+					<a class="mui-navigate-right">女声</a>
+				</li>
+			</ul>
+			<ul class="mui-table-view mui-table-view-chevron" style="margin-top: 15px;">
+				<li class="mui-table-view-cell">
+					<a href="#about" class="mui-navigate-right">关于我们 </a>
+				</li>
+				<li class="mui-table-view-cell">
+					<a href="#about" class="mui-navigate-right">检查更新 <i class="mui-pull-right update">V1.0.0</i></a>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 15px;">
+				<li id="quit" class="mui-table-view-cell" style="text-align: center;">
+					<a>退出登录</a>
+				</li>
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			document.getElementById("quit").addEventListener("tap",function(){
+				mui.confirm("确定退出当前账号？","提示",['取消', '确定'],function(e){
+					if(e.index==1){
+						window.localStorage.removeItem("user");
+						plus.runtime.quit();
+					}
+				});
+			});
+			mui.plusReady(function(){
+				var soundsex= window.localStorage.getItem("soundsex");
+				if(soundsex==null){
+					document.getElementById("boy").classList.add("mui-selected");
+					window.localStorage.setItem("soundsex","男");
+				}else{
+					if(soundsex=="男"){
+						document.getElementById("boy").classList.add("mui-selected");
+					}else{
+						document.getElementById("girl").classList.add("mui-selected");
+					}
+				}
+			});
+			document.getElementById("boy").addEventListener("tap",function(){
+				window.localStorage.setItem("soundsex","男");
+			});
+			document.getElementById("girl").addEventListener("tap",function(){
+				window.localStorage.setItem("soundsex","女");
+			});
+		</script>
+	</body>
+
+</html>

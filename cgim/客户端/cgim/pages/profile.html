@@ -1,0 +1,162 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style type="text/css">
+			#himg{
+				height: 18vw;
+				width: 18vw;
+				border-radius:3px;
+				margin:2vw 5vw;
+			}
+			.mui-btn-block{
+				height: 40px;
+				padding: 8px 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">个人资料</h1>
+		</header>
+		<div class="mui-content">
+		    <ul class="mui-table-view" style="margin-top: 15px;">
+				<li class="mui-table-view-cell mui-media" style="padding:0px;">
+		            <img id="himg" class="mui-pull-left" src="../images/logo.png">
+		            <div class="mui-pull-right" style="width:72vw;padding-top: 15px;">
+		            	<p style="color: #000000;font-size: 19px;" id="uname"></p>
+	            		<p style="color: #dbdbdb;font-size: 13px;" id="ugender"></p>
+		            </div>
+		    	</li>
+	        </ul>
+			<ul class="mui-table-view" style="margin-top: 15px;">
+				<li class="mui-table-view-cell">
+					个性签名<p class='mui-pull-right mui-ellipsis-2' style="max-width: 70%;">暂无个性签名</p>
+				</li>
+				<li class="mui-table-view-cell">生日
+					<p class='mui-ellipsis mui-pull-right' id="ubirthday"></p>
+				</li>
+				<li class="mui-table-view-cell">地区
+					<p class='mui-ellipsis mui-pull-right' id="uaddress"></p>
+				</li>
+				
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 15px;">
+				<li class="mui-table-view-cell" >邮箱
+					<p class='mui-ellipsis mui-pull-right' id="uemail"></p>
+				</li>
+				<li class="mui-table-view-cell" id="phone">电话
+					<p class='mui-ellipsis mui-pull-right' id="pnumber"></p>
+				</li>
+			</ul>
+			<div class="mui-row" style="margin-top: 15px;padding:5px;">
+				<button id="sendbtn" type="button" class="mui-btn mui-btn-success mui-btn-block mui-hidden" >发消息</button>
+				<button id="delbtn" type="button" class="mui-btn mui-btn-red mui-btn-block mui-hidden" >删除好友</button>
+				<button id="addbtn" type="button" class="mui-btn mui-btn-success mui-btn-block mui-hidden" >添加好友</button>
+			</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			var userinfo;
+			var sendbtn =document.getElementById("sendbtn");
+			var delbtn =document.getElementById("delbtn");
+			var addbtn =document.getElementById("addbtn");
+			window.addEventListener('toprofile',function(event){
+				userinfo=event.detail.userinfo;
+				if(user.id!=userinfo.id){
+					mui.post(sip+"getUser.do",{id:user.id},function(data){
+						if(data!=null&&data!="null"&&data!="[]"){
+							var newinfo = eval("("+data+")");
+							if(newinfo.friends!=null){
+								if(newinfo.friends.indexOf(userinfo.id)>-1){
+									sendbtn.classList.remove("mui-hidden");
+									delbtn.classList.remove("mui-hidden");
+								}else{
+									addbtn.classList.remove("mui-hidden");
+								}
+							}else{
+								addbtn.classList.remove("mui-hidden");
+							}
+						}
+					});
+					
+				}
+				document.getElementById("uname").innerText=userinfo.name||"";
+				document.getElementById("ugender").innerText=(userinfo.gender||"")+"/22岁";
+				document.getElementById("ubirthday").innerText=userinfo.birthday==undefined?"":new Date(userinfo.birthday).toLocaleDateString();
+				document.getElementById("uemail").innerText=userinfo.email||"";
+				document.getElementById("pnumber").innerText=userinfo.cellphone||"";
+				document.getElementById("uaddress").innerText=userinfo.address||"";
+				document.getElementById("himg").src=sip+(userinfo.uimg||"");
+			});
+			document.getElementById("phone").addEventListener('tap', function(event) {
+				var pnumber = document.getElementById("pnumber").innerText;
+				var btnArray = [{
+					title: "打电话"
+				}, {
+					title: "发短信"
+				}];
+				plus.nativeUI.actionSheet({
+					title: "给该号码",
+					cancel: "取消",
+					buttons: btnArray
+				}, function(e) {
+					var index = e.index;
+					switch (index) {
+						case 0:
+							break;
+						case 1:
+							plus.device.dial(pnumber,false);
+							break;
+						case 2:
+							var msg = plus.messaging.createMessage(plus.messaging.TYPE_SMS);
+							msg.to = [pnumber];
+							plus.messaging.sendMessage(msg);
+							break;
+					}
+				});
+			}, false);
+			mui(".mui-row").on("tap",".mui-btn",function(){
+				var txt = this.innerHTML;
+				if(txt=="发消息"){
+					window.localStorage.setItem("chatid",userinfo.id);
+					window.localStorage.setItem("chattype",1);
+					window.localStorage.setItem("chatname",userinfo.name);
+					plus.webview.getWebviewById("chatpage.html").evalJS("initpage()");
+					mui.openWindow({url:'chatpage.html',id:'chatpage.html'});
+				}else if(txt=="添加好友"){
+					mui.fire(plus.webview.getWebviewById("index.html"),"sendmsg",{tid:userinfo.id,tname:userinfo.name,ttype:1,msgtext:"申请加你为好友",msgextras:"addfriend",msgtype:"application"});
+					mui.toast("已发送好友添加申请");
+					mui.back();
+				}else if(txt=="删除好友"){
+					mui.confirm("确定删除该好友？","提示",['取消', '确定'],function(e){
+						if(e.index==1){
+							mui.post(sip+"deletefriend.do",{uid:user.id,tid:userinfo.id},function(data){
+								if(data=="true"){
+									plus.webview.getWebviewById("sub_contact.html").evalJS("getMyFriends()");
+									plus.webview.getWebviewById("sub_message.html").evalJS("delchatlog('"+userinfo.id+"')");
+									mui.toast("已删除该好友");
+									mui.back();
+								}
+							});
+						}
+					});
+				}
+			});
+			mui.plusReady(function(){
+				plus.webview.currentWebview().addEventListener("hide",function(){
+					window.location.reload();
+				});
+			});
+		</script>
+	</body>
+
+</html>

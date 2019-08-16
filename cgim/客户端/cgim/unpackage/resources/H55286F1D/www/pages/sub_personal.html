@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>好友动态</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style type="text/css">
+			#userimg{
+				border-radius: 3px;
+				height: 65px;
+				width: 65px;
+				margin:0px 10px;
+			}
+			.mui-table-view-cell{
+				padding: 14px 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="mui-content">
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<div class="mui-pull-left" style="width: 70%;">
+		            	<img id="userimg"class="mui-pull-left">
+		            	<div style="float: right;margin-top:15px;width: 55%;">
+		            		<span style="color:#515151;font-size: 16px;" id="username"></span><br>
+		            		<span style="color:#8f8f94;font-size: 13px;" id="baseinfo"></span>
+		            	</div>
+		            </div>
+		            <span class="mui-icon iconfont icon-erweima mui-pull-right" style="color:#8f8f94;font-size: 35px;margin:20px 15px 0px 0px;"></span>
+				</li>
+			</ul>
+	        <ul class="mui-table-view" style="margin-top: 15px;">
+				<li class="mui-table-view-cell">
+					个性签名<p class='mui-pull-right' style="max-width: 70%;" id="signature"></p>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 15px;">
+				<li class="mui-table-view-cell">
+					地区<p class='mui-pull-right' style="max-width: 70%;" id="address"></p>
+				</li>
+				<li class="mui-table-view-cell">
+					爱好<p class='mui-pull-right' style="max-width: 70%;" id="hobby"></p>
+				</li>
+			</ul>
+			<ul class="mui-table-view" style="margin-top: 15px;">
+				<li class="mui-table-view-cell" style="padding: 12px 15px;">
+					<a href="setting.html" class="mui-navigate-right">设置</a>
+				</li>
+			</ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({preloadPages:[{url:"setting.html",id:"setting.html"},
+				{url:"erweimacard.html",id:"erweimacard.html"},
+				{url:"editprofile.html",id:"editprofile.html"}]});
+			mui(".mui-table-view").on("tap","a",function(){
+				var target = this.getAttribute("href");
+				if(target=="#"){
+					mui.toast("正在建设中，敬请期待~！")
+				}else{
+					pagejump(target);
+				}
+			});
+			document.querySelector(".icon-erweima").addEventListener("tap",function(){
+				pagejump("erweimacard.html");
+			});
+			document.getElementById("userimg").addEventListener("tap",function(){
+				pagejump("editprofile.html");
+			});
+			window.onload =function(){
+				initpage();
+			}
+			function initpage(){
+				document.getElementById("username").innerHTML=user.name;
+				if(user.birthday!=undefined){
+					var age = new Date().getFullYear()-new Date(user.birthday).getFullYear();
+					document.getElementById("baseinfo").innerHTML=(user.gender||"")+"/"+age+"岁";
+				}
+				document.getElementById("signature").innerHTML=user.signature||"该用户较懒，未留下个性签名";
+				document.getElementById("address").innerHTML=user.address||"";
+				document.getElementById("hobby").innerHTML=user.hobby||"";
+				document.getElementById("userimg").src=sip+"getuimg.do?uid="+user.id;
+			}
+		</script>
+	</body>
+
+</html>

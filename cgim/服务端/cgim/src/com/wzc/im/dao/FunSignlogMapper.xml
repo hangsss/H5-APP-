@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wzc.im.dao.FunSignlogMapper" >
+  <resultMap id="BaseResultMap" type="com.wzc.im.bean.FunSignlog" >
+    <id column="ID" property="id" jdbcType="VARCHAR" />
+    <result column="SIGNID" property="signid" jdbcType="VARCHAR" />
+    <result column="SIGNUSER" property="signuser" jdbcType="VARCHAR" />
+    <result column="SIGNUSERIMG" property="signuserimg" jdbcType="VARCHAR" />
+    <result column="SIGNUSERID" property="signuserid" jdbcType="VARCHAR" />
+    <result column="SIGNTIME" property="signtime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ID, SIGNID, SIGNUSER, SIGNUSERIMG, SIGNUSERID, SIGNTIME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wzc.im.bean.FunSignlogExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from fun_signlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from fun_signlog
+    where ID = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from fun_signlog
+    where ID = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wzc.im.bean.FunSignlogExample" >
+    delete from fun_signlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wzc.im.bean.FunSignlog" >
+    insert into fun_signlog (ID, SIGNID, SIGNUSER, 
+      SIGNUSERIMG, SIGNUSERID, SIGNTIME
+      )
+    values (#{id,jdbcType=VARCHAR}, #{signid,jdbcType=VARCHAR}, #{signuser,jdbcType=VARCHAR}, 
+      #{signuserimg,jdbcType=VARCHAR}, #{signuserid,jdbcType=VARCHAR}, #{signtime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.wzc.im.bean.FunSignlog" >
+    insert into fun_signlog
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="signid != null" >
+        SIGNID,
+      </if>
+      <if test="signuser != null" >
+        SIGNUSER,
+      </if>
+      <if test="signuserimg != null" >
+        SIGNUSERIMG,
+      </if>
+      <if test="signuserid != null" >
+        SIGNUSERID,
+      </if>
+      <if test="signtime != null" >
+        SIGNTIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="signid != null" >
+        #{signid,jdbcType=VARCHAR},
+      </if>
+      <if test="signuser != null" >
+        #{signuser,jdbcType=VARCHAR},
+      </if>
+      <if test="signuserimg != null" >
+        #{signuserimg,jdbcType=VARCHAR},
+      </if>
+      <if test="signuserid != null" >
+        #{signuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="signtime != null" >
+        #{signtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wzc.im.bean.FunSignlogExample" resultType="java.lang.Integer" >
+    select count(*) from fun_signlog
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update fun_signlog
+    <set >
+      <if test="record.id != null" >
+        ID = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signid != null" >
+        SIGNID = #{record.signid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signuser != null" >
+        SIGNUSER = #{record.signuser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signuserimg != null" >
+        SIGNUSERIMG = #{record.signuserimg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signuserid != null" >
+        SIGNUSERID = #{record.signuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.signtime != null" >
+        SIGNTIME = #{record.signtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update fun_signlog
+    set ID = #{record.id,jdbcType=VARCHAR},
+      SIGNID = #{record.signid,jdbcType=VARCHAR},
+      SIGNUSER = #{record.signuser,jdbcType=VARCHAR},
+      SIGNUSERIMG = #{record.signuserimg,jdbcType=VARCHAR},
+      SIGNUSERID = #{record.signuserid,jdbcType=VARCHAR},
+      SIGNTIME = #{record.signtime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wzc.im.bean.FunSignlog" >
+    update fun_signlog
+    <set >
+      <if test="signid != null" >
+        SIGNID = #{signid,jdbcType=VARCHAR},
+      </if>
+      <if test="signuser != null" >
+        SIGNUSER = #{signuser,jdbcType=VARCHAR},
+      </if>
+      <if test="signuserimg != null" >
+        SIGNUSERIMG = #{signuserimg,jdbcType=VARCHAR},
+      </if>
+      <if test="signuserid != null" >
+        SIGNUSERID = #{signuserid,jdbcType=VARCHAR},
+      </if>
+      <if test="signtime != null" >
+        SIGNTIME = #{signtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wzc.im.bean.FunSignlog" >
+    update fun_signlog
+    set SIGNID = #{signid,jdbcType=VARCHAR},
+      SIGNUSER = #{signuser,jdbcType=VARCHAR},
+      SIGNUSERIMG = #{signuserimg,jdbcType=VARCHAR},
+      SIGNUSERID = #{signuserid,jdbcType=VARCHAR},
+      SIGNTIME = #{signtime,jdbcType=TIMESTAMP}
+    where ID = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

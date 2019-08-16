@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wzc.im.dao.ImGroupMapper" >
+  <resultMap id="BaseResultMap" type="com.wzc.im.bean.ImGroup" >
+    <id column="GID" property="gid" jdbcType="INTEGER" />
+    <result column="GIMG" property="gimg" jdbcType="VARCHAR" />
+    <result column="GNAME" property="gname" jdbcType="VARCHAR" />
+    <result column="MEMBERS" property="members" jdbcType="VARCHAR" />
+    <result column="CREATETIME" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="CREATEUSERID" property="createuserid" jdbcType="INTEGER" />
+    <result column="DESCRIPTION" property="description" jdbcType="VARCHAR" />
+    <result column="CREATENAME" property="createname" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    GID, GIMG, GNAME, MEMBERS, CREATETIME, CREATEUSERID, DESCRIPTION, CREATENAME
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.wzc.im.bean.ImGroupExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from im_group
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from im_group
+    where GID = #{gid,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from im_group
+    where GID = #{gid,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.wzc.im.bean.ImGroupExample" >
+    delete from im_group
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.wzc.im.bean.ImGroup" >
+    insert into im_group (GID, GIMG, GNAME, 
+      MEMBERS, CREATETIME, CREATEUSERID, 
+      DESCRIPTION, CREATENAME)
+    values (#{gid,jdbcType=INTEGER}, #{gimg,jdbcType=VARCHAR}, #{gname,jdbcType=VARCHAR}, 
+      #{members,jdbcType=VARCHAR}, #{createtime,jdbcType=TIMESTAMP}, #{createuserid,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR}, #{createname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="gid" parameterType="com.wzc.im.bean.ImGroup" >
+    insert into im_group
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="gid != null" >
+        GID,
+      </if>
+      <if test="gimg != null" >
+        GIMG,
+      </if>
+      <if test="gname != null" >
+        GNAME,
+      </if>
+      <if test="members != null" >
+        MEMBERS,
+      </if>
+      <if test="createtime != null" >
+        CREATETIME,
+      </if>
+      <if test="createuserid != null" >
+        CREATEUSERID,
+      </if>
+      <if test="description != null" >
+        DESCRIPTION,
+      </if>
+      <if test="createname != null" >
+        CREATENAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="gid != null" >
+        #{gid,jdbcType=INTEGER},
+      </if>
+      <if test="gimg != null" >
+        #{gimg,jdbcType=VARCHAR},
+      </if>
+      <if test="gname != null" >
+        #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="members != null" >
+        #{members,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuserid != null" >
+        #{createuserid,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createname != null" >
+        #{createname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.wzc.im.bean.ImGroupExample" resultType="java.lang.Integer" >
+    select count(*) from im_group
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update im_group
+    <set >
+      <if test="record.gid != null" >
+        GID = #{record.gid,jdbcType=INTEGER},
+      </if>
+      <if test="record.gimg != null" >
+        GIMG = #{record.gimg,jdbcType=VARCHAR},
+      </if>
+      <if test="record.gname != null" >
+        GNAME = #{record.gname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.members != null" >
+        MEMBERS = #{record.members,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createtime != null" >
+        CREATETIME = #{record.createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createuserid != null" >
+        CREATEUSERID = #{record.createuserid,jdbcType=INTEGER},
+      </if>
+      <if test="record.description != null" >
+        DESCRIPTION = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createname != null" >
+        CREATENAME = #{record.createname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update im_group
+    set GID = #{record.gid,jdbcType=INTEGER},
+      GIMG = #{record.gimg,jdbcType=VARCHAR},
+      GNAME = #{record.gname,jdbcType=VARCHAR},
+      MEMBERS = #{record.members,jdbcType=VARCHAR},
+      CREATETIME = #{record.createtime,jdbcType=TIMESTAMP},
+      CREATEUSERID = #{record.createuserid,jdbcType=INTEGER},
+      DESCRIPTION = #{record.description,jdbcType=VARCHAR},
+      CREATENAME = #{record.createname,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.wzc.im.bean.ImGroup" >
+    update im_group
+    <set >
+      <if test="gimg != null" >
+        GIMG = #{gimg,jdbcType=VARCHAR},
+      </if>
+      <if test="gname != null" >
+        GNAME = #{gname,jdbcType=VARCHAR},
+      </if>
+      <if test="members != null" >
+        MEMBERS = #{members,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createuserid != null" >
+        CREATEUSERID = #{createuserid,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        DESCRIPTION = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createname != null" >
+        CREATENAME = #{createname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where GID = #{gid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.wzc.im.bean.ImGroup" >
+    update im_group
+    set GIMG = #{gimg,jdbcType=VARCHAR},
+      GNAME = #{gname,jdbcType=VARCHAR},
+      MEMBERS = #{members,jdbcType=VARCHAR},
+      CREATETIME = #{createtime,jdbcType=TIMESTAMP},
+      CREATEUSERID = #{createuserid,jdbcType=INTEGER},
+      DESCRIPTION = #{description,jdbcType=VARCHAR},
+      CREATENAME = #{createname,jdbcType=VARCHAR}
+    where GID = #{gid,jdbcType=INTEGER}
+  </update>
+</mapper>

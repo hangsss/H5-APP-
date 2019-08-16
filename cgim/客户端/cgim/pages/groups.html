@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style>
+			.mui-media-body{
+				line-height: 35px;
+				font-size: 15px;
+			}
+			.mui-table-view-cell {
+				padding: 9px 15px;
+			}
+			.mui-table-view .mui-media-object {
+			    max-width: 35px;
+			    height: 35px;
+			    border-radius: 3px;
+			}
+			.mui-content>.mui-table-view:first-child {
+			    margin-top: 0px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">我的群组</h1>
+		    <a class="mui-icon mui-icon-plus mui-pull-right"></a>
+		</header>
+		<div class="mui-content">
+		    <h5 class="mui-content-padded">我创建的群组</h5>
+		    <ul id="mycreate" class="mui-table-view" style="padding-right: 10px;"></ul>
+		    <h5 class="mui-content-padded">我加入的群组</h5>
+		    <ul id="myjoin" class="mui-table-view" style="padding-right: 10px;"></ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			mui.plusReady(function(){
+				document.querySelector(".mui-pull-right").addEventListener("tap",function(){
+					pagejump("creatgroup.html");
+				});
+				getmygroups();
+			});
+			var grouplist;
+			var mycreateg = document.getElementById("mycreate");
+			var myjoing = document.getElementById("myjoin");
+			function getmygroups(){
+				mycreateg.innerHTML="";
+				myjoing.innerHTML="";
+				mui.post(sip+"myGroups.do",{id:user.id},function( data ) {
+					grouplist = eval(data);
+					for(var i=0;i<grouplist.length;i++){
+						var group = grouplist[i];
+							addmycontacts(group,i)
+					}
+					if(mycreateg.innerHTML==""){
+						mycreateg.innerHTML='<li class="mui-table-view-cell mui-disabled">暂无创建群组</li>';
+					}
+					if(myjoing.innerHTML==""){
+						myjoing.innerHTML='<li class="mui-table-view-cell mui-disabled">暂无加入群组</li>';
+					}
+				});
+			}
+			function addmycontacts(group,num) {
+				var li = document.createElement('li');
+				var imgpath =sip+group.gimg
+				li.className = 'mui-table-view-cell mui-media';
+				li.innerHTML='<a href="javascript:void(0)" onclick="tochat('+num+')">'+
+							'<img class="mui-media-object mui-pull-left" src="'+imgpath+'">'+
+							'<div class="mui-media-body">'+group.gname+'</div></a>';
+				if(group.createuserid==user.id){
+					mycreateg.appendChild(li);
+				}else{
+					myjoing.appendChild(li);
+				}
+			}
+			function tochat(num){
+				var group = grouplist[num];
+				window.localStorage.setItem("groupinfo",JSON.stringify(group));
+				window.localStorage.setItem("chatid",group.gid);
+				window.localStorage.setItem("chattype","2");
+				window.localStorage.setItem("chatname",group.gname);
+				plus.webview.getWebviewById("chatpage.html").evalJS("initpage()");
+				mui.openWindow({url:'chatpage.html',id:'chatpage.html'});
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>创建群组</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<script type="text/javascript" src="../js/config.js" ></script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav" >
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">新群组</h1>
+		</header>
+		<div class="mui-content">
+		    <div class="mui-card">
+				<div class="mui-card-content mui-card-media">
+					<div class="mui-card-content-inner">
+						<center>
+						    <img id="uploadimg"  src="../images/upload.png" style="width: 30vw;margin-top: 15vw;"/>
+							<p style="margin-top: 10px;">上传群组头像</p>
+							<input type="text" id="groupname" class="mui-input-clear" placeholder="请输入群组名" style="background: transparent;border: 0px;border-bottom:1px solid rgba(0,0,0,.2);text-align: center;margin-top: 40px;color: black;" >
+							<input type="text" id="usernames" class="mui-input-clear" placeholder="选择群组人员" style="background: transparent;border: 0px;border-bottom:1px solid rgba(0,0,0,.2);text-align: center;color: black;margin-top: 10px;" readonly >
+							<button type="submit" class="mui-btn mui-btn-block mui-btn-primary" style="height: 40px;padding: 8px;margin-top: 20px;">创建</button>
+						</center>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({preloadPages:[{url:"selectuser.html",id:"selectuser.html"}]})
+			document.getElementById("usernames").addEventListener("tap",function(){
+				mui.openWindow({url:"selectuser.html",id:"selectuser.html"});
+			});
+			var groupUserid=user.id+",";
+			window.addEventListener("getusers",function(event){
+				document.getElementById("usernames").value=event.detail.usernames;
+				groupUserid =groupUserid+event.detail.userids;
+			});
+			mui(".mui-card-content-inner").on('tap','.mui-btn',function(){
+				document.activeElement.blur(); 
+				mui(this).button('loading');
+				var groupname = mui("#groupname")[0].value;
+				if(groupname!=null&&groupname!=""){
+					mui.post(sip+"addGroup.do",{createuserid:user.id,gname:groupname,members:groupUserid,gimg:imgsrc,createname:user.name},function(data){
+							if(data!="null"){
+								plus.webview.getWebviewById("groups.html").evalJS("getmygroups()");
+								mui.back();
+							}else{
+								mui.alert("该群组创建失败");
+							}
+					});
+				}else{
+					mui.toast("群组名称不能为空");
+				}
+			});
+			var imgsrc;
+			var upimg =document.getElementById("uploadimg");
+			upimg.addEventListener("tap",function(){
+				var btnArray = [{
+					title: "拍照"
+				}, {
+					title: "从相册选择"
+				}];
+				plus.nativeUI.actionSheet({
+					title: "选择照片",
+					cancel: "取消",
+					buttons: btnArray
+				}, function(e) {
+					var index = e.index;
+					switch (index) {
+						case 0:
+							break;
+						case 1:
+							var cmr = plus.camera.getCamera();
+							cmr.captureImage(function(path) {
+								var task = plus.uploader.createUpload(sip+"uploadfile.do",
+							    		{method: "POST"},function(t, status) {
+								            if (status == 200) { 
+								                console.log("上传成功：" + t.responseText);
+								                eval("var data="+t.responseText);
+								                if(data.result=="OK"){
+								                	upimg.src=sip+data.path;
+								                	imgsrc =data.path;
+								                }else{
+								                	mui.toast("上传失败！");
+								                }
+								                
+								            }else{ 
+								            	mui.toast("上传失败！");
+								                console.log("上传失败：" + status); 
+								            } 
+							        	} 
+							    ); 
+							    var keyid = Math.floor(Math.random() * 100000000 + 10000000).toString();
+							    var dstname="_downloads/"+keyid+".jpg";
+							   	plus.zip.compressImage({
+						            src: "file://" + plus.io.convertLocalFileSystemURL(path), 
+						            dst: dstname, 
+						            overwrite:true, 
+						            quality: 20 
+						        },function(event) { 
+						            console.log("success:"+event.target); 
+						            task.addFile(event.target, {key: keyid}); 
+							    	task.start();
+						        },function(error) { 
+						            console.log(error); 
+						        });
+							}, function(err) {});
+							break;
+						case 2:
+							plus.gallery.pick(function(path) { 
+						        	var task = plus.uploader.createUpload(sip+"uploadfile.do",
+							    		{method: "POST"},function(t, status) {
+								            if (status == 200) { 
+								                console.log("上传成功：" + t.responseText);
+								                eval("var data="+t.responseText);
+								                if(data.result=="OK"){
+								                	upimg.src=sip+data.path;
+								                	imgsrc =data.path;
+								                }else{
+								                	mui.toast("上传失败！");
+								                }
+								            }else{ 
+								            	mui.toast("上传失败！");
+								                console.log("上传失败：" + status); 
+								            } 
+							        	}); 
+							        var keyid = Math.floor(Math.random() * 100000000 + 10000000).toString();
+							    	var dstname="_downloads/"+keyid+".jpg";
+								   	plus.zip.compressImage({
+							            src: path, 
+							            dst: dstname, 
+							            overwrite:true, 
+							            quality: 20 
+							        },function(event) { 
+							            console.log("success:"+event.target); 
+							            task.addFile(event.target, {key: keyid}); 
+								    	task.start();
+							        },function(error) { 
+							            console.log("error"); 
+							        });
+		    				}, function(e) {},{filter: "image"});
+							break;
+					}
+				});
+			},false);
+		</script>
+	</body>
+
+</html>

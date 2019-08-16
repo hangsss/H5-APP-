@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/iconfont.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/imageview.css"/>
+		<link rel="stylesheet" href="../css/app.css" />
+		<script src="../js/config.js" type="text/javascript" charset="utf-8"></script>
+		<style>
+			body,.mui-content{background: #FFFFFF;font-family: "微软雅黑";}
+			.dy-card{border-bottom: 1px  #E8E8E8 solid;margin: 10px; padding-bottom: 8px;}
+			.dy-uimg{width: 45px; height: 45px; margin-right: 10px; float: left;}
+			.dy-body{margin-left: 55px;  }
+			.dy-header{font-size: 17px;width:100%;padding-bottom: 6px;}
+			.dy-header span{ color: #707070; font-size: 15px;float: right;}
+			.dy-content p{ font-size: 16px; color: black; }
+			.imgpriview{
+				width: 85px;
+				margin-left: 5px;
+				margin-bottom: 5px;
+			}
+			.dy-operate{
+				clear: both;
+			}
+			.dy-operate span{font-size: 20px;color: #707070;margin-right: 50px;margin-bottom: 5px;}
+			.dy-operate span.active{color: #007AFF;}
+			.dy-comment{
+				background-color: #EFEFF4;
+				border-radius: 3px;
+				padding:8px;
+				min-height: 0px;
+			}
+			.dy-comment p{
+				font-size: 14px;
+				color: black;
+				margin-bottom: 0px;
+			}
+			.footer-input{
+				height: 50px;
+				width: 100%;
+				padding: 5px;
+				position: fixed;
+				bottom: 0px;
+				padding-right: 60px;
+				background: #EFEFEF;
+			}
+			.mui-backdrop {
+				position: fixed;
+				top: 0;
+				right: 0;
+				bottom: 50px;
+				left: 0;
+				z-index: 998;
+				background-color: rgba(0,0,0,0);
+			}
+			.zannames{
+				font-size: 14px;color: #007aff;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">圈子</h1>
+		    <a class="mui-icon mui-icon-plus mui-pull-right"></a>
+		</header>
+		<div class="mui-content">
+			<center style="padding-top: 100px;">加载中...</center>
+		</div>
+		<div class="footer-input mui-hidden">
+			<div class="mui-input-row">
+			    <input type="text" class="mui-input-speech mui-input-clear" placeholder="请输入..." style="border-radius: 5px;margin-bottom: 0px;">
+			</div>
+			<button id="pubcom" type="button" class="mui-btn mui-btn-blue mui-disabled" style="float: right;margin-right: -55px;margin-top: -39px;height: 38px;">发送</button>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.zoom.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.previewimage.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../libs/dynamic.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+
+</html>

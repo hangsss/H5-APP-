@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="../css/app.css"/>
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css"/>
+		<link rel="stylesheet" type="text/css" href="../css/mui.poppicker.css"/>
+		<style type="text/css">
+			.mui-table-view-cell{
+				padding: 14px 15px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">个人资料</h1>
+		</header>
+		<div class="mui-content">
+		    <ul class="mui-table-view">
+		            <li class="mui-table-view-cell" id="touxiang">
+		            	<font style="line-height: 55px;">头像</font>
+		            	<img src="" style="float: right;height:55px;"  id="photo"/>
+		            </li>
+		            <li class="mui-table-view-cell" id="nicheng">
+		            	昵称<p class='mui-pull-right' style="max-width: 70%;" id="name">未填写</p>
+		            </li>
+		            <li class="mui-table-view-cell" id="genderPicker">
+		            	性别<p class='mui-pull-right' style="max-width: 70%;" id="gender">未填写</p>
+		            </li>
+		            <li class="mui-table-view-cell" id="birthday">
+		            	生日<p class='mui-pull-right' style="max-width: 70%;" id="birthdaytxt">未填写</p>
+		            </li>
+		        </ul>
+		        <ul class="mui-table-view" style="margin-top: 15px;">
+		        	<li class="mui-table-view-cell" id="diqu">
+		            	地区<p class='mui-pull-right' style="max-width: 70%;" id="address">未填写</p>
+		            </li>
+		        	<li class="mui-table-view-cell" id="qianming">
+		            	个性签名<p class='mui-pull-right' style="max-width: 70%;" id="signature">未填写</p>
+		            </li>
+		        </ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/mui.picker.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.poppicker.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			mui.init()
+			document.getElementById("birthday").addEventListener("tap",function(){
+				var optionsJson = '{"type":"date","beginYear":1900}';
+				var options = JSON.parse(optionsJson);
+				var picker = new mui.DtPicker(options);
+				picker.show(function(rs) {
+					var mbirthday = rs.text;
+					document.getElementById("birthdaytxt").innerHTML =mbirthday.replace(/-/g,"/");
+					mui.post(sip+"updateUserInfo.do",{mbirthday:mbirthday,id:user.id},function(data){
+						if(data=="true"){
+							console.log("修改成功");
+						}else{
+							console.log("修改失败");
+						}
+					});
+					picker.dispose();
+				});
+			});
+			var genderPicker = new mui.PopPicker();
+			var arry=[{value:"男",text:"男"},{value:"女",text:"女"}];
+			genderPicker.setData(arry);
+			document.getElementById('genderPicker').addEventListener('tap', function(event) {
+				genderPicker.show(function(items) {
+					var gendert = items[0].text;
+					document.getElementById("gender").innerHTML =gendert;
+					mui.post(sip+"updateUserInfo.do",{gender:gendert,id:user.id},function(data){
+						if(data=="true"){
+							console.log("修改成功");
+						}else{
+							console.log("修改失败");
+						}
+					});
+				});
+			}, false);
+			function setdata(){
+				document.getElementById("name").innerHTML=user.name;
+				document.getElementById("photo").src = sip+"getuimg.do?uid="+user.id;
+				document.getElementById("gender").innerHTML=user.gender||"未填写";
+				var birthday="未填写";
+				if(user.birthday!=undefined){
+					birthday = new Date(user.birthday).toLocaleDateString();
+				}
+				document.getElementById("birthdaytxt").innerHTML=birthday;
+				document.getElementById("address").innerHTML=user.address||"未填写";
+				document.getElementById("signature").innerHTML=user.signature||"该用户较懒，未留下个性签名";
+			}
+			mui.plusReady(function(){
+				setdata();
+				plus.webview.currentWebview().addEventListener("show",function(){
+					setdata();
+				});
+				plus.webview.currentWebview().addEventListener("hide",function(){
+					mui.post(sip+"getUser.do",{id:user.id},function(data){
+						if(data!=null&&data!="null"&&data!="[]"){
+							window.localStorage.setItem("user","("+data+")");
+						}
+					});
+				});
+			})
+			function sethimg(path){
+				mui.post(sip+"updateUserInfo.do",{uimg:path,id:user.id},function(data){
+					if(data=="true"){
+						console.log("修改成功");
+					}else{
+						console.log("修改失败");
+					}
+				});
+			}
+			var upimg =document.getElementById("photo");
+			document.getElementById("touxiang").addEventListener("tap",function(){
+				var btnArray = [{
+					title: "拍照"
+				}, {
+					title: "从相册选择"
+				}];
+				plus.nativeUI.actionSheet({
+					title: "选择照片",
+					cancel: "取消",
+					buttons: btnArray
+				}, function(e) {
+					var index = e.index;
+					switch (index) {
+						case 0:
+							break;
+						case 1:
+							var cmr = plus.camera.getCamera();
+							cmr.captureImage(function(path) {
+								var task = plus.uploader.createUpload(sip+"uploadfile.do",
+							    		{method: "POST"},function(t, status) {
+								            if (status == 200) { 
+								                console.log("上传成功：" + t.responseText);
+								                eval("var data="+t.responseText);
+								                if(data.result=="OK"){
+								                	upimg.src=sip+data.path;
+								                	sethimg(data.path);
+								                }else{
+								                	mui.toast("上传失败！");
+								                }
+								            }else{ 
+								            	mui.toast("上传失败！");
+								                console.log("上传失败：" + status); 
+								            } 
+							        	} 
+							    ); 
+							    var keyid = Math.floor(Math.random() * 100000000 + 10000000).toString();
+							    var dstname="_downloads/"+keyid+".jpg";
+							   	plus.zip.compressImage({
+						            src: "file://" + plus.io.convertLocalFileSystemURL(path), 
+						            dst: dstname, 
+						            overwrite:true, 
+						            quality: 20 
+						        },function(event) { 
+						            console.log("success:"+event.target); 
+						            task.addFile(event.target, {key: keyid}); 
+							    	task.start();
+						        },function(error) { 
+						            console.log(error); 
+						        });
+							}, function(err) {});
+							break;
+						case 2:
+							plus.gallery.pick(function(path) { 
+						        	var task = plus.uploader.createUpload(sip+"uploadfile.do",
+							    		{method: "POST"},function(t, status) {
+								            if (status == 200) { 
+								                console.log("上传成功：" + t.responseText);
+								                eval("var data="+t.responseText);
+								                if(data.result=="OK"){
+								                	upimg.src=sip+data.path;
+								                	sethimg(data.path);
+								                }else{
+								                	mui.toast("上传失败！");
+								                }
+								            }else{ 
+								            	mui.toast("上传失败！");
+								                console.log("上传失败：" + status); 
+								            } 
+							        	}); 
+							        var keyid = Math.floor(Math.random() * 100000000 + 10000000).toString();
+							    	var dstname="_downloads/"+keyid+".jpg";
+								   	plus.zip.compressImage({
+							            src: path, 
+							            dst: dstname, 
+							            overwrite:true, 
+							            quality: 20 
+							        },function(event) { 
+							            console.log("success:"+event.target); 
+							            task.addFile(event.target, {key: keyid}); 
+								    	task.start();
+							        },function(error) { 
+							            console.log("error"); 
+							        });
+		    				}, function(e) {},{filter: "image"});
+							break;
+					}
+				});
+			},false);
+			document.getElementById("nicheng").addEventListener("tap",function(){
+				mui.prompt('好名字可以让人更容易记住你','','请输入昵称', ['取消', '确定'], function(e) {
+					if (e.index == 1) {
+						var valuename = e.value;
+						document.getElementById("name").innerText = valuename;
+						mui.post(sip+"updateUserInfo.do",{name:valuename,id:user.id},function(data){
+							if(data=="true"){
+								console.log("修改成功");
+							}else{
+								console.log("修改失败");
+							}
+						});
+					}
+				})	
+			});
+			document.getElementById("diqu").addEventListener("tap",function(){
+				mui.prompt('例如：河南 郑州','','请输入地区', ['取消', '确定'], function(e) {
+					if (e.index == 1) {
+						var valuename = e.value;
+						document.getElementById("address").innerText = valuename;
+						mui.post(sip+"updateUserInfo.do",{address:valuename,id:user.id},function(data){
+							if(data=="true"){
+								console.log("修改成功");
+							}else{
+								console.log("修改失败");
+							}
+						});
+					}
+				})	
+			});
+			document.getElementById("qianming").addEventListener("tap",function(){
+				mui.prompt('个性签名彰显个性自我','','请输入个性签名', ['取消', '确定'], function(e) {
+					if (e.index == 1) {
+						var valuename = e.value;
+						document.getElementById("signature").innerText = valuename;
+						mui.post(sip+"updateUserInfo.do",{signature:valuename,id:user.id},function(data){
+							if(data=="true"){
+								console.log("修改成功");
+							}else{
+								console.log("修改失败");
+							}
+						});
+					}
+				})	
+			});
+		</script>
+	</body>
+
+</html>

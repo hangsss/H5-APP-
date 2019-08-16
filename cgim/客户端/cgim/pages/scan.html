@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+		<meta name="HandheldFriendly" content="true"/>
+		<meta name="MobileOptimized" content="320"/>
+		<title>扫一扫</title>
+		<link href="../css/iconfont.css" type="text/css" rel="stylesheet" charset="utf-8"/>
+		<link href="../css/common.css" type="text/css" rel="stylesheet"  charset="utf-8"/>
+		<script src="../js/config.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/mui.min.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			#bcid {
+				width: 100%;
+				position: absolute;
+				top: 0px;
+				bottom: 60px;
+				text-align: center;
+			}
+			.tip {
+				color: #FFFFFF;
+				font-weight: bold;
+				text-shadow: 0px -1px #103E5C;
+			}
+			footer {
+				width: 100%;
+				height: 60px;
+				position: absolute;
+				bottom: 0px;
+				line-height: 60px;
+				text-align: center;
+				color: #FFF;
+			}
+			.fbt {
+				width: 33%;
+				height: 100%;
+				float: left;
+				vertical-align: middle;
+				color: #FFFFFF;
+				text-align: center;
+			}
+			.fbt:active {
+			  	-webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5);
+				box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.5);
+			}
+		</style>
+	</head>
+	<body style="background-color: #2c2c2c;">
+		<div id="bcid">
+			<div style="height:40%"></div>
+			<p class="tip">...载入中...</p>
+		</div>
+		<footer>
+			<div class="fbt" onclick="back()"><span class="mui-icon iconfont icon-quxiao" style="font-size: 40px;"></span></div>
+			<div class="fbt" onclick="turnlight()"><span class="mui-icon iconfont icon-kaideng" style="font-size: 40px;"></span></div>
+			<div class="fbt" onclick="scanPicture()"><span class="mui-icon iconfont icon-xiangce" style="font-size: 40px;"></span></div>
+		</footer>
+		<script type="text/javascript">
+			var ws=null,wo=null,scan=null,domready=false;
+			// H5 plus事件处理
+			function plusReady(){
+				if(ws||!window.plus||!domready){
+					return;
+				}
+				// 获取窗口对象
+				ws=plus.webview.currentWebview();
+				// 开始扫描
+				ws.addEventListener('show', function(){
+					scan=new plus.barcode.Barcode('bcid');
+				    scan.onmarked=onmarked;
+				    scan.start({conserve:true,filename:'_doc/barcode/'});
+				}, false);
+				// 显示页面并关闭等待框
+			    ws.show('pop-in');
+			}
+			if(window.plus){
+				plusReady();
+			}else{
+				document.addEventListener('plusready', plusReady, false);
+			}
+			// 监听DOMContentLoaded事件
+			document.addEventListener('DOMContentLoaded', function(){
+				domready=true;
+				plusReady();
+			}, false);
+			// 二维码扫描成功
+			function onmarked(type, result, file){
+			    switch(type){
+			    	case plus.barcode.QR:
+			    	type = 'QR';
+			    	break;
+			    	case plus.barcode.EAN13:
+			    	type = 'EAN13';
+			    	break;
+			    	case plus.barcode.EAN8:
+			    	type = 'EAN8';
+			    	break;
+			    	default:
+			    	type = '其它'+type;
+			    	break;
+			    }
+			    result = result.replace(/\n/g, '');
+			    handleres(result);
+			}
+			// 从相册中选择二维码图片 
+			function scanPicture(){
+			    plus.gallery.pick(function(path){
+				    plus.barcode.scan(path,onmarked,function(error){
+						plus.nativeUI.alert('无法识别此图片');
+					});
+			    }, function(err){
+			        console.log('Failed: '+err.message);
+			    });
+			}
+			//打开关闭闪光灯处理  
+	        var flag = false; 
+			function turnlight(){
+				if(flag == false){  
+                  	scan.setFlash(true);  
+                  	flag = true;  
+               	}else{  
+                 	scan.setFlash(false);  
+                 	flag = false;  
+               	}
+			}
+			function handleres(result){
+				if(result.indexOf("/")){
+					var strary = result.split("/");
+					if(strary[0]=="addfriend"){
+						mui.post(sip+"addfriend.do",{uid:user.id,tid:strary[1]},function(data){
+							if(data=="true"){
+								mui.toast("扫描成功，已互相成为好友");
+								plus.webview.getWebviewById("sub_contact.html").evalJS("getMyFriends()");
+								mui.back();
+							}
+						});
+					}else if(strary[0]=="jiongroup"){
+						mui.post(sip+"joinGroup.do",{uid:user.id,gid:strary[1]},function(data){
+							if(data=="true"){
+								mui.toast("扫描成功，已加入群聊");
+								plus.webview.getWebviewById("groups.html").evalJS("getmygroups()");
+								mui.back();
+							}
+						});
+					}else if(strary[0]=="scansign"){
+						mui.post(sip+"signcheck.do",{signuserid:user.id,signid:strary[1],signuser:user.name},function(data){
+							if(data=="true"){
+								mui.toast("扫描成功，已签到");
+								mui.back();
+							}else{
+								mui.toast(data);
+								mui.back();
+							}
+						});
+					}else{
+						mui.alert("暂不支持此操作");
+					}
+				}else{
+					mui.alert("暂不支持此操作");
+				}
+			}
+		</script>
+	</body>
+</html>

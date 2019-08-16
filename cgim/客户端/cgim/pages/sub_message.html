@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>消息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style type="text/css">
+			.mtime{float: right;font-size: 14px;color:#8f8f94;}
+			.mui-table-view .mui-media-object {
+			    border-radius: 3px;
+			}
+			.mui-content>.mui-table-view:first-child {
+			    margin-top: 0px;
+			}
+			.mui-media-body{height: 42px;}
+			.bodytop{width: 100%;height: 24px;}
+			.bodybot{width: 100%;}
+			.bodybot p{width: 85%;float: left;}
+			.bodybot span{float: right;}
+		</style>
+	</head>
+
+	<body>
+		<img id="nullmsg" src="../images/nullmsg.png" style="width: 130px;position: fixed;z-index: 999;top: 150px;left: 50%;margin-left: -65px;"/>
+		<div class="mui-content">
+	    	<ul class="mui-table-view" id="msgtips"></ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript" src="../libs/message.js" ></script>
+	</body>
+
+</html>

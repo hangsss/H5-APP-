@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/iconfont.css" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+		<style type="text/css">
+			.mui-content>.mui-table-view:first-child { margin-top: 0px;}
+			#search{background: transparent;border: 0px;border-bottom: 1px solid LimeGreen;border-radius: 0px;}
+			#clear{color: #E4B9B9;position: fixed;right: 5px;top:5px;font-size: 35px;}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title" style="right: 8px;">
+		    	<input id="search" type="number"  placeholder="请输入用户账号" style="margin-bottom: 0px;padding-right: 35px;">
+		    	<span id="clear" class="mui-icon mui-icon-closeempty mui-hidden"></span>
+		    </h1>
+		</header>
+		<div class="mui-content">
+			<ul id="searchul" class="mui-table-view mui-hidden">
+		        <li class="mui-table-view-cell" id="searchuser">
+		        	<span class="mui-icon iconfont icon-yonghu" style="font-size: 20px;"></span>
+		        	找人：<span id="userid"></span></li>
+		    </ul>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init({preloadPages:[{url:"profile.html",id:"profile.html"}]});
+			var clear = document.getElementById("clear");
+			var searchinput = document.querySelector("#search");
+			searchinput.addEventListener("input",function(){
+				var val = this.value;
+				document.getElementById("searchul").classList.remove("mui-hidden");
+				if(val!=null&&val!=""){
+					if(clear.classList.contains("mui-hidden")){
+						clear.classList.remove("mui-hidden");
+					}
+					document.getElementById("userid").innerText=val;
+				}else{
+					if(!clear.classList.contains("mui-hidden")){
+						clear.classList.add("mui-hidden");
+					}
+					document.getElementById("userid").innerText="";
+					document.getElementById("searchul").classList.add("mui-hidden");
+				}
+			});
+			clear.addEventListener("tap",function(){
+				clear.classList.add("mui-hidden");
+				searchinput.value="";
+				document.getElementById("userid").innerText="";
+				document.getElementById("searchul").classList.add("mui-hidden");
+			});
+			document.getElementById("searchuser").addEventListener("tap",function(){
+				var w = plus.nativeUI.showWaiting("正在搜索中...", {loading:{icon:"/images/waiting.png"}});
+				var uid = document.getElementById("userid").innerText;
+				var flag=true;
+				setTimeout(function(){ if(flag){ w.close(); mui.toast("搜索失败");}},10000);
+				mui.post(sip+"getUser.do",{id:uid},function(data){
+					flag=false;
+					if(data!=null&&data!="null"&&data!="[]"){
+						w.close();
+						var userinfo = eval("("+data+")");
+						firejump("profile.html","toprofile",{userinfo:userinfo});
+					}else{
+						w.close();
+						mui.alert("该用户不存在");
+					}
+				});
+			});
+			mui.plusReady(function(){
+				plus.webview.currentWebview().addEventListener("show",function(){
+					document.getElementById("search").focus();
+				})
+			});
+		</script>
+	</body>
+
+</html>

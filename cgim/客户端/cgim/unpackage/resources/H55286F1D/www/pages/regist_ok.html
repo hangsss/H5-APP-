@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>注册成功</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/app.css" />
+		<script type="text/javascript" src="../js/config.js" ></script>
+	<style type="text/css">
+		body,.mui-content{background-color: #FFFFFF;}
+	</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+		    <a class=" mui-icon mui-icon-left-nav mui-pull-left"></a>
+		    <h1 class="mui-title">注册成功</h1>
+		</header>
+		<div class="mui-content">
+			<center>
+				<div class="mui-content-padded">请记住你的登录账号</div>
+				<h1 id="acount">100005</h1>
+				<div class="mui-content-padded" style="margin-top: 20px;">设置头像</div>
+				<img id="uploadhimg" src="../images/uploadphoto.png" style="margin: 10px 0px;height: 128px;width: 128px;" />
+				<div class="mui-content-padded">
+					<button type="button" class="mui-btn mui-btn-blue mui-btn-block mui-disabled">前往登录 </button>
+				</div>
+			</center>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script type="text/javascript">
+			mui.init()
+			var id;
+			var upimg = document.getElementById("uploadhimg");
+			window.addEventListener("showacount",function(){
+				id=event.detail.id;
+				document.getElementById("acount").innerText=id;
+			});
+			mui(".mui-content").on("tap",".mui-btn",function(){
+				mui.openWindow({url:'login.html',id:'login.html'});
+			});
+			function sethimg(path){
+				mui.post(sip+"updateUserInfo.do",{uimg:path,id:id},function(data){
+					if(data=="true"){
+						console.log("修改成功");
+					}else{
+						console.log("修改失败");
+					}
+				});
+			}
+			upimg.addEventListener("tap",function(){
+				var btnArray = [{
+					title: "拍照"
+				}, {
+					title: "从相册选择"
+				}];
+				plus.nativeUI.actionSheet({
+					title: "选择照片",
+					cancel: "取消",
+					buttons: btnArray
+				}, function(e) {
+					var index = e.index;
+					switch (index) {
+						case 0:
+							break;
+						case 1:
+							var cmr = plus.camera.getCamera();
+							cmr.captureImage(function(path) {
+								var task = plus.uploader.createUpload(sip+"uploadfile.do",
+							    		{method: "POST"},function(t, status) {
+								            if (status == 200) { 
+								                console.log("上传成功：" + t.responseText);
+								                eval("var data="+t.responseText);
+								                if(data.result=="OK"){
+								                	upimg.src=sip+data.path;
+								                	sethimg(data.path);
+								                	document.querySelector(".mui-btn").classList.remove("mui-disabled");
+								                }else{
+								                	mui.toast("上传失败！");
+								                }
+								            }else{ 
+								            	mui.toast("上传失败！");
+								                console.log("上传失败：" + status); 
+								            } 
+							        	} 
+							    ); 
+							    var keyid = Math.floor(Math.random() * 100000000 + 10000000).toString();
+							    var dstname="_downloads/"+keyid+".jpg";
+							   	plus.zip.compressImage({
+						            src: "file://" + plus.io.convertLocalFileSystemURL(path), 
+						            dst: dstname, 
+						            overwrite:true, 
+						            quality: 20 
+						        },function(event) { 
+						            console.log("success:"+event.target); 
+						            task.addFile(event.target, {key: keyid}); 
+							    	task.start();
+						        },function(error) { 
+						            console.log(error); 
+						        });
+							}, function(err) {});
+							break;
+						case 2:
+							plus.gallery.pick(function(path) { 
+						        	var task = plus.uploader.createUpload(sip+"uploadfile.do",
+							    		{method: "POST"},function(t, status) {
+								            if (status == 200) { 
+								                console.log("上传成功：" + t.responseText);
+								                eval("var data="+t.responseText);
+								                if(data.result=="OK"){
+								                	upimg.src=sip+data.path;
+								                	sethimg(data.path);
+								                	document.querySelector(".mui-btn").classList.remove("mui-disabled");
+								                }else{
+								                	mui.toast("上传失败！");
+								                }
+								            }else{ 
+								            	mui.toast("上传失败！");
+								                console.log("上传失败：" + status); 
+								            } 
+							        	}); 
+							        var keyid = Math.floor(Math.random() * 100000000 + 10000000).toString();
+							    	var dstname="_downloads/"+keyid+".jpg";
+								   	plus.zip.compressImage({
+							            src: path, 
+							            dst: dstname, 
+							            overwrite:true, 
+							            quality: 20 
+							        },function(event) { 
+							            console.log("success:"+event.target); 
+							            task.addFile(event.target, {key: keyid}); 
+								    	task.start();
+							        },function(error) { 
+							            console.log("error"); 
+							        });
+		    				}, function(e) {},{filter: "image"});
+							break;
+					}
+				});
+			},false);
+		</script>
+	</body>
+
+</html>

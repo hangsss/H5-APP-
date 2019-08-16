@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="cgim"
+  id="myeclipse.1492308400491"
+  context-root="/cgim"
+  j2ee-spec="5.0"
+  archive="cgim.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
