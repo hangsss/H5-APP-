@@ -11,5 +11,6 @@
              数据库：MySql 5.7
              辅助工具包（jar包）gson.jar、commons-fileupload等
              
-# 项目截图：
-          ![image] (https://github.com/hangsss/imgs/blob/master/img/a.jpg)
+
+          
+![image](https://github.com/hangsss/imgs/blob/master/img/a.jpg)
