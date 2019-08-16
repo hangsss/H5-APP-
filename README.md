@@ -12,4 +12,4 @@
              辅助工具包（jar包）gson.jar、commons-fileupload等
              
 # 项目截图：
-          ![image](https://github.com/hangsss/img/blob/master/img/%E5%BC%80%E5%A7%8B%E7%95%8C%E9%9D%A2.jpg)
+          ![image](https://github.com/hangsss/img/blob/master/img/%E4%B8%AA%E4%BA%BA%E8%B5%84%E6%96%99%E7%95%8C%E9%9D%A2.png)
